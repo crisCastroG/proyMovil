@@ -4,12 +4,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
 <ion-text color="primary" class="ion-text-center">
   <h1>App de Ejemplo</h1>
 </ion-text>
 <ion-list class="ion-padding" lines="none">
-  <ion-list-header mode="ios" color="warning">Menu</ion-list-header>
+  <ion-list-header mode="ios" color="warning">
+    <ion-label>Menu</ion-label>
+  </ion-list-header>
   <ion-item detail="true" routerLink="/botones">
     <ion-icon name="apps-outline" slot="start"></ion-icon>
     <ion-label>Botones</ion-label>
@@ -17,6 +19,10 @@
   <ion-item detail="true" routerLink="/alertas">
     <ion-label>Alertas</ion-label>
     <ion-icon name="warning" slot="start" color=""></ion-icon>
+  </ion-item>
+  <ion-item detail="true" routerLink="/formulario">
+    <ion-label>Formulario</ion-label>
+    <ion-icon name="reader-outline" slot="start" color=""></ion-icon>
   </ion-item>
 </ion-list>
 </ion-content>
