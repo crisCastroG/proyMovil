@@ -18,7 +18,8 @@ const routes: Routes = [
   {
     path: 'alertas',
     loadChildren: () => import('./pages/alertas/alertas.module').then( m => m.AlertasPageModule)
-  },  {
+  },
+  {
     path: 'formulario',
     loadChildren: () => import('./pages/formulario/formulario.module').then( m => m.FormularioPageModule)
   },
@@ -41,6 +42,14 @@ const routes: Routes = [
   {
     path: 'confirmacion-qr',
     loadChildren: () => import('./pages/confirmacion-qr/confirmacion-qr.module').then( m => m.ConfirmacionQrPageModule)
+  },
+  {
+    path: 'registro',
+    loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+  },
+  {
+    path: 'asignatura-detalle',
+    loadChildren: () => import('./pages/asignatura-detalle/asignatura-detalle.module').then( m => m.AsignaturaDetallePageModule)
   },
 
 ];
