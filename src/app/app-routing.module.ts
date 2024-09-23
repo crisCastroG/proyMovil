@@ -26,6 +26,22 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+  {
+    path: 'registro-asignatura',
+    loadChildren: () => import('./pages/registro-asignatura/registro-asignatura.module').then( m => m.RegistroAsignaturaPageModule)
+  },
+  {
+    path: 'asignaturas',
+    loadChildren: () => import('./pages/asignaturas/asignaturas.module').then( m => m.AsignaturasPageModule)
+  },
+  {
+    path: 'generar-qr',
+    loadChildren: () => import('./pages/generar-qr/generar-qr.module').then( m => m.GenerarQrPageModule)
+  },
+  {
+    path: 'confirmacion-qr',
+    loadChildren: () => import('./pages/confirmacion-qr/confirmacion-qr.module').then( m => m.ConfirmacionQrPageModule)
+  },
 
 ];
 

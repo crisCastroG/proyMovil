@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>registro_asignatura</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-input
+        label="Nombre Asignatura"
+        labelPlacement="stacked"
+        [clearInput]="true"
+        placeholder="Ingrese el nombre de la asignatura"
+      >
+      </ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-input
+        label="Codigo Asignatura"
+        labelPlacement="stacked"
+        type="text"
+        [clearInput]="true"
+        placeholder="Ingrese el codigo de la asignatura"
+      >
+      </ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-input
+        label="Numero de seccion"
+        labelPlacement="stacked"
+        type="text"
+        placeholder="Ingrese el numero de la seccion"
+      >
+      </ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button color="warning" expand="full">
+  <ion-icon slot="end" name="save"></ion-icon>
+    Guardar
+
+  </ion-button>
+</ion-content>

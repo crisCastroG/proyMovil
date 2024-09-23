@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>asignaturas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-content>
+    <ion-accordion-group>
+      <ion-accordion value="first" toggleIcon="caret-down-circle" toggleIconSlot="start">
+        <ion-item slot="header" color="light">
+          <ion-label>Aplicaciones moviles</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">Seccion 002</div>
+      </ion-accordion>
+      <ion-accordion value="second" toggleIcon="caret-down-circle" toggleIconSlot="start">
+        <ion-item slot="header" color="light">
+          <ion-label>Desarrollo Orientado a Objetos</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content" routerLink="/home">Seccion 004</div>
+        <div class="ion-padding" slot="content">Seccion 001</div>
+      </ion-accordion>
+      <ion-accordion value="third" toggleIcon="caret-down-circle" toggleIconSlot="start">
+        <ion-item slot="header" color="light">
+          <ion-label>Programacion web</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">Seccion 006</div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-content>
+</ion-content>
