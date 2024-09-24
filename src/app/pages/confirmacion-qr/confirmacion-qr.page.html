@@ -1,13 +1,24 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" mode="ios" text="Volver"></ion-back-button>
+    </ion-buttons>
     <ion-title>confirmacion_qr</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">confirmacion_qr</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-card>
+    <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+    <ion-card-header>
+      <ion-card-title>Asignatura</ion-card-title>
+      <ion-card-subtitle>Seccion - Fecha</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button routerLink="/codigo-qr">
+        <ion-icon slot="end" name="qr-scanner"></ion-icon>
+        Generar QR
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
