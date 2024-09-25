@@ -70,6 +70,18 @@ const routes: Routes = [
     path: 'asistencia-detalle',
     loadChildren: () => import('./pages/asistencia-detalle/asistencia-detalle.module').then( m => m.AsistenciaDetallePageModule)
   },
+  {
+    path: 'escanear-qr-alumno',
+    loadChildren: () => import('./pages/escanear-qr-alumno/escanear-qr-alumno.module').then( m => m.EscanearQrAlumnoPageModule)
+  },
+  {
+    path: 'escaneo-exitoso',
+    loadChildren: () => import('./pages/escaneo-exitoso/escaneo-exitoso.module').then( m => m.EscaneoExitosoPageModule)
+  },
+  {
+    path: 'escaneo-fallido',
+    loadChildren: () => import('./pages/escaneo-fallido/escaneo-fallido.module').then( m => m.EscaneoFallidoPageModule)
+  },
 
 
 ];
