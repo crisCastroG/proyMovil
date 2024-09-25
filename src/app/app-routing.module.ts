@@ -50,9 +50,25 @@ const routes: Routes = [
   {
     path: 'asignatura-detalle',
     loadChildren: () => import('./pages/asignatura-detalle/asignatura-detalle.module').then( m => m.AsignaturaDetallePageModule)
-  },  {
+  },
+  {
     path: 'codigo-qr',
     loadChildren: () => import('./pages/codigo-qr/codigo-qr.module').then( m => m.CodigoQrPageModule)
+  },
+  {
+    path: 'home-alumno',
+    loadChildren: () => import('./pages/home-alumno/home-alumno.module').then( m => m.HomeAlumnoPageModule)
+  },
+  {
+    path: 'asignaturas-alumno',
+    loadChildren: () => import('./pages/asignaturas-alumno/asignaturas-alumno.module').then( m => m.AsignaturasAlumnoPageModule)
+  },
+  {
+    path: 'asignaturas-alumno-detalle',
+    loadChildren: () => import('./pages/asignaturas-alumno-detalle/asignaturas-alumno-detalle.module').then( m => m.AsignaturasAlumnoDetallePageModule)
+  },  {
+    path: 'asistencia-detalle',
+    loadChildren: () => import('./pages/asistencia-detalle/asistencia-detalle.module').then( m => m.AsistenciaDetallePageModule)
   },
 
 
