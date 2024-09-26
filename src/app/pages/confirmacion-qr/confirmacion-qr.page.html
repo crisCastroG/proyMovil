@@ -1,24 +1,17 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/generar-qr" mode="ios" text="Volver"></ion-back-button>
-    </ion-buttons>
-    <ion-title>confirmacion_qr</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado></app-encabezado>
 
 <ion-content class="ion-padding">
   <ion-card>
     <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
     <ion-card-header>
-      <ion-card-title>Asignatura</ion-card-title>
-      <ion-card-subtitle>Seccion - Fecha</ion-card-subtitle>
+      <ion-card-title>Programacion Web</ion-card-title>
+      <ion-card-subtitle>Seccion 2- Fecha 04/03/2024</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-button routerLink="/codigo-qr">
-        <ion-icon slot="end" name="qr-code"></ion-icon>
-        Generar QR
-      </ion-button>
     </ion-card-content>
   </ion-card>
+  <ion-button expand="block" routerLink="/codigo-qr">
+    <ion-icon slot="end" name="qr-code"></ion-icon>
+    Generar QR
+  </ion-button>
 </ion-content>

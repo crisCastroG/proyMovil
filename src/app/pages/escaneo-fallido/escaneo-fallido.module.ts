@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EscaneoFallidoPageRoutingModule } from './escaneo-fallido-routing.module';
 
 import { EscaneoFallidoPage } from './escaneo-fallido.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EscaneoFallidoPageRoutingModule
+    EscaneoFallidoPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [EscaneoFallidoPage]
 })

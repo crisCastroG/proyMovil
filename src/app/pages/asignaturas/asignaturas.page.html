@@ -1,37 +1,29 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" mode="ios" text="Volver"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Asignaturas</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado></app-encabezado>
 
 <ion-content class="ion-padding">
-  <ion-content>
-    <ion-title class="ion-text-center ion-margin">
+    <h1 class="ion-text-center ion-margin">
       Lista de Asignaturas
-    </ion-title>
+    </h1>
     <ion-accordion-group>
       <ion-accordion value="first" toggleIcon="caret-down-circle" toggleIconSlot="start">
         <ion-item slot="header" color="light">
           <ion-label>Aplicaciones moviles</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">Seccion 002</div>
+        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion 002</div>
       </ion-accordion>
       <ion-accordion value="second" toggleIcon="caret-down-circle" toggleIconSlot="start">
         <ion-item slot="header" color="light">
           <ion-label>Desarrollo Orientado a Objetos</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content" routerLink="/home">Seccion 004</div>
-        <div class="ion-padding" slot="content">Seccion 001</div>
+        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle">Seccion 004</div>
+        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle">Seccion 001</div>
       </ion-accordion>
       <ion-accordion value="third" toggleIcon="caret-down-circle" toggleIconSlot="start">
         <ion-item slot="header" color="light">
           <ion-label>Programacion web</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">Seccion 006</div>
+        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion 006</div>
       </ion-accordion>
     </ion-accordion-group>
-  </ion-content>
+    
 </ion-content>

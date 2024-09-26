@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-text color="secondary">
+    <h1 style="text-align: center;">Seleccione tipo de cuenta:</h1>
+  </ion-text>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="6">
+        <div class="mid-button ion-activatable ripple-parent" routerLink="/registro-alumno">
+          Alumno   
+          <ion-ripple-effect type="bounded"></ion-ripple-effect>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="mid-button ion-activatable ripple-parent" routerLink="/registro">
+          Docente
+          <ion-ripple-effect type="bounded"></ion-ripple-effect>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button expand="block" color="secondary"  labelPlacement="floating" type="submit" size="small" routerLink="/login" >
+    <ion-text color="light">
+      <p>Volver</p>
+    </ion-text>
+  </ion-button>
+</ion-content>

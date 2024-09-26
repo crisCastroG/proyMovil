@@ -21,18 +21,18 @@
           [(ngModel)]="usr.password" name="password"
           placeholder=""></ion-input>
         </ion-item>
-        <ion-button expand="block" color="primary" type="submit" size="small" [disabled]="formulario.invalid" >
+        <ion-button expand="block" color="primary" type="submit" size="small" routerLink="/home" >
           <ion-text color="light">
             <p>Iniciar Sesión Docente</p>
           </ion-text>
         </ion-button> 
-        <ion-button expand="block" color="tertiary" type="submit" size="small" [disabled]="formulario.invalid" >
+        <ion-button expand="block" color="tertiary" type="submit" size="small" routerLink="/home-alumno" >
           <ion-text color="light">
             <p>Iniciar Sesión Alumno</p>
           </ion-text>
         </ion-button> 
       </form>
-       <ion-button expand="block" size="small" fill="solid" color="secondary" routerLink="/registro">
+       <ion-button expand="block" size="small" fill="solid" color="secondary" routerLink="/registro-opciones">
         <p>Crear usuario</p>
        </ion-button>          
     </ion-list>

@@ -1,36 +1,46 @@
 <app-encabezado></app-encabezado>
 
 <ion-content class="ion-padding">
-<ion-text color="primary" class="ion-text-center">
-  <h1></h1>
-</ion-text>
-<ion-list class="ion-padding" lines="none">
-  <ion-list-header mode="ios" color="warning">
-    <ion-label>Me nu</ion-label>
-  </ion-list-header>
-  <ion-item detail="true" routerLink="/botones">
-    <ion-icon name="qr-code-outline" slot="start"></ion-icon>
-    <ion-label>Generar QR</ion-label>
-  </ion-item>
-  <ion-item detail="true" routerLink="/alertas">
-    <ion-label>Asistencias</ion-label>
-    <ion-icon name="book-outline" slot="start" color=""></ion-icon>
-  </ion-item>
-  <ion-item detail="true" routerLink="/registro-asignatura">
-    <ion-label>Registrar Asignaturas</ion-label>
-    <ion-icon name="Add" slot="start" color=""></ion-icon>
-  </ion-item>
-</ion-list>
 <ion-grid fixed color="primary">
+  <ion-row>
+  </ion-row>
   <ion-row>
     <ion-col size="1"></ion-col>
     <ion-col size="10">
-      <div class="big-button ripple-parent"></div>
+      <div class="big-button ion-activatable ripple-parent" routerLink="/generar-qr">
+        <ion-text color="dark">
+          <h1 style="margin-right: 10px;">Generar QR</h1>
+        </ion-text>
+        <ion-icon slot="start" name="qr-code-outline" size="large"></ion-icon>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
     </ion-col>
     <ion-col size="1"></ion-col>
   </ion-row>
   <ion-row>
-    <ion-col size="12"></ion-col>
+    <ion-col size="1"></ion-col>
+    <ion-col size="5">
+      <div class="mid-button ion-activatable ripple-parent" routerLink="/asignaturas">
+        <ion-text color="light">
+          <p style="margin-right: 10px;">Asistencias</p>
+        </ion-text>
+        <ion-icon slot="start" name="book-outline" color="light" size="large"></ion-icon>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+    </ion-col>
+    <ion-col size="5">
+      <div class="mid-button ion-activatable ripple-parent" routerLink="/registro-asignatura">
+        <ion-text color="light">
+          <p style="margin-right: 0px;">Registrar asignaturas</p>
+        </ion-text>
+        <ion-icon slot="start" name="add" color="light" size="large"></ion-icon>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+    </ion-col>
+    <ion-col size="1">
+
+    </ion-col>
+
   </ion-row>
 </ion-grid>
 </ion-content>

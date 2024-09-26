@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EscanearQrAlumnoPageRoutingModule } from './escanear-qr-alumno-routing.module';
 
 import { EscanearQrAlumnoPage } from './escanear-qr-alumno.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EscanearQrAlumnoPageRoutingModule
+    EscanearQrAlumnoPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [EscanearQrAlumnoPage]
 })

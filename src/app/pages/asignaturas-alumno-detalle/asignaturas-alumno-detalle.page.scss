@@ -1,0 +1,57 @@
+.table-container {
+    padding: 16px;
+    overflow-x: auto; /* Habilita el scroll horizontal si es necesario */
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tr{
+    position: relative;
+    overflow: hidden;
+  }
+  
+  thead {
+    background-color: #fdaa09;  /* Color primario */
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #1a1a1a;  /* Color secundario */
+  }
+  
+  th {
+    color: #1a1a1a;  /* Texto del header con el color secundario */
+    font-weight: bold;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f27e;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  td {
+    color: #1a1a1a;  /* Color del texto de las filas */
+  }
+  
+  .estado {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .presente {
+    background-color: #28a745;  /* Verde para presente */
+  }
+  
+  .ausente {
+    background-color: #dc3545;  /* Rojo para ausente */
+  }

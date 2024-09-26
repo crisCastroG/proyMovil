@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -91,6 +91,23 @@ const routes: Routes = [
     path: 'escaneo-fallido',
     loadChildren: () => import('./pages/escaneo-fallido/escaneo-fallido.module').then( m => m.EscaneoFallidoPageModule)
   },
+  {
+    path: 'registro-alumno',
+    loadChildren: () => import('./pages/registro-alumno/registro-alumno.module').then( m => m.RegistroAlumnoPageModule)
+  },
+  {
+    path: 'registro-opciones',
+    loadChildren: () => import('./pages/registro-opciones/registro-opciones.module').then( m => m.RegistroOpcionesPageModule)
+  },
+  {
+    path: 'perfil-alumno',
+    loadChildren: () => import('./pages/perfil-alumno/perfil-alumno.module').then( m => m.PerfilAlumnoPageModule)
+  },
+  {
+    path: 'perfil-docente',
+    loadChildren: () => import('./pages/perfil-docente/perfil-docente.module').then( m => m.PerfilDocentePageModule)
+  },
+
 
 
 

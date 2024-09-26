@@ -1,19 +1,15 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/confirmacion-qr" mode="ios" text="Volver"></ion-back-button>
-    </ion-buttons>
-    <ion-title>codigo_qr</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado></app-encabezado>
 
 <ion-content class="ion-padding">
   <ion-title class="ion-text-center ion-margin">
-    Codigo Generado
+    Código Generado
   </ion-title>
-  <ion-thumbnail class="image-container">
-    <img alt="QR" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
-  </ion-thumbnail>
+  <div style="display: flex; justify-content: center;">
+    <ion-thumbnail>
+      <img alt="QR" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+    </ion-thumbnail>
+  </div>
+
   <ion-text color="primary" class="ion-text-center">
     <h1>Tiempo - 3:00</h1>
   </ion-text>
@@ -24,8 +20,8 @@
     <ion-icon slot="end" name="home"></ion-icon>
     Home
   </ion-button>
-  <ion-button>
-    Abrir Navegador 
+  <ion-button expand="block" color="secondary">
+    Abrir en Navegador 
   </ion-button>
   <!-- El boton de abrir navegador pensamos que es para que pueda proyectarlo (?)-->
 </ion-content>

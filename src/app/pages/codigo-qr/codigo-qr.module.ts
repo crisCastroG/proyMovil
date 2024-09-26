@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CodigoQrPageRoutingModule } from './codigo-qr-routing.module';
 
 import { CodigoQrPage } from './codigo-qr.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CodigoQrPageRoutingModule
+    CodigoQrPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [CodigoQrPage]
 })

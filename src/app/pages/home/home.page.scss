@@ -4,9 +4,44 @@
     height: 100px;
     align-items: center;
     justify-content : center;
+    padding-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.mid-button{
+    display: flex;
+    background-color: #1a1a1a;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    padding-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.menu-header{
+    display: flex;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    background-color: #c8c8c8;
 }
 
 .ripple-parent {
     position: relative;
     overflow: hidden;
   }
+
+h1{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+    text-align: center;
+    inline-size: min-content;
+    margin: 0;
+}

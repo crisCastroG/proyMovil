@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EscaneoExitosoPageRoutingModule } from './escaneo-exitoso-routing.module';
 
 import { EscaneoExitosoPage } from './escaneo-exitoso.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EscaneoExitosoPageRoutingModule
+    EscaneoExitosoPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [EscaneoExitosoPage]
 })
