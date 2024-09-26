@@ -1,5 +1,8 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/escanear-qr-alumno" mode="ios" text="Volver"></ion-back-button>
+     </ion-buttons>
     <ion-title>escaneo_fallido</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,6 +12,6 @@
     <h2>Escaneo fallido</h2>
     <p>No se pudo escanear el código QR correctamente.</p>
     <!--<ion-button (click)="tryAgain()">Intentar de nuevo</ion-button> -->
-    <ion-button routerLink="/home">Volver al menú</ion-button>
+    <ion-button routerLink="/home-alumno">Volver al menú</ion-button>
   </div>
 </ion-content>
