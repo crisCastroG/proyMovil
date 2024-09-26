@@ -25,7 +25,7 @@ export class RegistroPage implements OnInit {
     console.log(this.usr);
     if(this.usr.username=="wacoldo" && this.usr.password=="123"){
       console.log("Acceso ok");
-        this.router.navigate(['/home'])
+        this.router.navigate(['/login'])
     }
     else{
       this.mensaje='Acceso Denegado';

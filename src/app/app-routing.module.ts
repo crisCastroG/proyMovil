@@ -66,10 +66,15 @@ const routes: Routes = [
   {
     path: 'asignaturas-alumno-detalle',
     loadChildren: () => import('./pages/asignaturas-alumno-detalle/asignaturas-alumno-detalle.module').then( m => m.AsignaturasAlumnoDetallePageModule)
-  },  {
+  },
+  {
     path: 'asistencia-detalle',
     loadChildren: () => import('./pages/asistencia-detalle/asistencia-detalle.module').then( m => m.AsistenciaDetallePageModule)
   },
+  {
+    path: 'components',
+    loadChildren: ()  => import('./components/components.module').then(m => m.ComponentsModule)
+  }
 
 
 ];

@@ -1,46 +1,48 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Registro</ion-title>
+  <ion-toolbar color="tertiary">
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
-<div class="centered-content">
   <ion-content class="ion-padding">
-    <ion-text color="primary" class="ion-text-center">
-      <h1>Registrar usuario</h1>
+    <ion-text color="secondary" class="ion-text-center">
+      <h1>Crear cuenta</h1>
     </ion-text>
-  
     <ion-list>
       <form #formulario="ngForm" (ngSubmit)="onSubmit()">
-        <ion-item>
-          <ion-input label="Correo" required type="text" 
-          labelPlacement="floating"
-          [(ngModel)]="usr.username" name="username"
-          placeholder="usuario"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input label="Contraseña"  required type="password" 
-          labelPlacement="floating" 
-          [(ngModel)]="usr.password" name="password"
-          placeholder="******"></ion-input>
-        </ion-item>
-        <ion-button expand="block" color="primary" type="submit" size="small" [disabled]="formulario.invalid" >
+        <ion-list>
+          <ion-list>                    
+            <ion-item>
+              <ion-input label="Correo" labelPlacement="floating" type="email"  placeholder=""></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input label="Nombre completo" labelPlacement="floating"  placeholder="Ingrese su nombre de usuario"></ion-input>
+            </ion-item>
+        
+            <ion-item>
+              <ion-input label="Contraseña" labelPlacement="floating"  type="password"></ion-input>
+            </ion-item>        
+            <ion-item>
+              <ion-input label="Confirme contraseña" labelPlacement="floating"  type="password" value=""></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-select aria-label="Tipo de cuenta" placeholder="Seleccione tipo de cuenta">
+                <ion-select-option value="docente">Docente</ion-select-option>
+                <ion-select-option value="alumno">Alumno</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </ion-list>
+        <ion-button expand="block" color="primary"  labelPlacement="floating" type="submit" size="small" routerLink="/login" [disabled]="formulario.invalid" >
           <ion-text color="light">
-            <p>Iniciar Sesión</p>
+            <p>Crear Usuario</p>
           </ion-text>
         </ion-button>
-      </form>
-
-       <ion-text class="ion-text-center link" color="primary">
-        <p>Crear usuario</p>
-       </ion-text>
-    
-      <ion-text color="primary">
-        <h1>{{mensaje}}</h1>
-      </ion-text>
+        <ion-button expand="block" color="secondary"  labelPlacement="floating" type="submit" size="small" routerLink="/login" [disabled]="formulario.invalid" >
+          <ion-text color="light">
+            <p>Volver</p>
+          </ion-text>
+        </ion-button>
+      </form>    
       
     </ion-list>
   </ion-content>
-</div>
-</ion-content>
