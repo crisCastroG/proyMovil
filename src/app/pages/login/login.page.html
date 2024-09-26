@@ -1,46 +1,40 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
+  <ion-toolbar color="tertiary">
   </ion-toolbar>
-</ion-header>
+</ion-header> 
 
-<ion-content >
-<div class="centered-content">
   <ion-content class="ion-padding">
-    <ion-text color="primary" class="ion-text-center">
+    <ion-text color="secondary" class="ion-text-center">
       <h1>Iniciar Sesión</h1>
     </ion-text>
-  
     <ion-list>
       <form #formulario="ngForm" (ngSubmit)="onSubmit()">
         <ion-item>
-          <ion-input label="Correo" required type="text" 
+          <ion-input label="Correo" type="text" 
           labelPlacement="floating"
           [(ngModel)]="usr.username" name="username"
-          placeholder="usuario"></ion-input>
+          placeholder=""></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Contraseña"  required type="password" 
+          <ion-input label="Contraseña"  type="password" 
           labelPlacement="floating" 
           [(ngModel)]="usr.password" name="password"
-          placeholder="******"></ion-input>
+          placeholder=""></ion-input>
         </ion-item>
         <ion-button expand="block" color="primary" type="submit" size="small" [disabled]="formulario.invalid" >
           <ion-text color="light">
-            <p>Iniciar Sesión</p>
+            <p>Iniciar Sesión Docente</p>
           </ion-text>
-        </ion-button>
+        </ion-button> 
+        <ion-button expand="block" color="tertiary" type="submit" size="small" [disabled]="formulario.invalid" >
+          <ion-text color="light">
+            <p>Iniciar Sesión Alumno</p>
+          </ion-text>
+        </ion-button> 
       </form>
-
-       <ion-text class="ion-text-center link" color="primary">
+       <ion-button expand="block" size="small" fill="solid" color="secondary" routerLink="/registro">
         <p>Crear usuario</p>
-       </ion-text>
-    
-      <ion-text color="primary">
-        <h1>{{mensaje}}</h1>
-      </ion-text>
-      
+       </ion-button>          
     </ion-list>
   </ion-content>
-</div>
-</ion-content>
+
