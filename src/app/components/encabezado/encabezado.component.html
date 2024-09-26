@@ -2,7 +2,11 @@
   <ion-header>
     <ion-toolbar color="secondary">
       <ion-title color="light">Wacoldo Escobar</ion-title>
-      <ion-icon slot="end" name="person-circle-outline" color="light" size="large" class="ion-padding" routerLink="/login"></ion-icon>
+      <div class="ion-activatable ripple-parent circle" slot="end">
+        <ion-icon name="person-circle-outline" color="light" size="large" class="ion-padding" routerLink="/login"></ion-icon>
+        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+      </div>
+      
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">

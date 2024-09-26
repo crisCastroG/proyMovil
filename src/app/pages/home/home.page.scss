@@ -1,0 +1,12 @@
+.big-button{
+    display: flex;
+    background-color: #fdaa09;
+    height: 100px;
+    align-items: center;
+    justify-content : center;
+}
+
+.ripple-parent {
+    position: relative;
+    overflow: hidden;
+  }

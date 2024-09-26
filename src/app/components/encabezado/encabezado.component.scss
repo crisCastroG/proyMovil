@@ -6,3 +6,12 @@ ion-grid{
     padding: 0;
     margin: 0;
 }
+
+.ripple-parent {
+    position: relative;
+    overflow: hidden;
+  }
+
+.circle {
+    border-radius: 50%;
+}
