@@ -1,11 +1,17 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>asignaturas</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" mode="ios" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Asignaturas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ion-content>
+    <ion-title class="ion-text-center ion-margin">
+      Lista de Asignaturas
+    </ion-title>
     <ion-accordion-group>
       <ion-accordion value="first" toggleIcon="caret-down-circle" toggleIconSlot="start">
         <ion-item slot="header" color="light">
