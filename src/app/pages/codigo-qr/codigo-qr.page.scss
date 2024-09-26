@@ -2,3 +2,17 @@ ion-thumbnail {
     --size: 140px;
     --border-radius: 14px;
   }
+
+  .image-container {
+    position: relative;
+    height: 20%;
+  }
+  
+  .image-container img {
+    position: absolute;
+    top: 50%;
+    left: 130%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+  }
+  
