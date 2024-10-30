@@ -6,35 +6,26 @@
   <ion-content class="ion-padding">
     <ion-text color="secondary" class="ion-text-center">
       <h1>Iniciar Sesión</h1>
-    </ion-text>
-    <ion-list>
-      <form #formulario="ngForm" (ngSubmit)="onSubmit()">
-        <ion-item>
-          <ion-input label="Correo" type="text" 
-          labelPlacement="floating"
-          [(ngModel)]="usr.username" name="username"
-          placeholder=""></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input label="Contraseña"  type="password" 
-          labelPlacement="floating" 
-          [(ngModel)]="usr.password" name="password"
-          placeholder=""></ion-input>
-        </ion-item>
-        <ion-button expand="block" color="primary" type="submit" size="small" routerLink="/home" >
-          <ion-text color="light">
-            <p>Iniciar Sesión Docente</p>
-          </ion-text>
-        </ion-button> 
-        <ion-button expand="block" color="tertiary" type="submit" size="small" routerLink="/home-alumno" >
-          <ion-text color="light">
-            <p>Iniciar Sesión Alumno</p>
-          </ion-text>
-        </ion-button> 
+
+      <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()">
+
+        <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" label="Correo"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+          <div *ngIf="form.controls.email.errors?.['required']">El correo es obligatorio</div>
+          <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
+        </div>
+
+        <app-custom-input autocomplete="contraseña" [control]="form.controls.password" type="password" label="Contraseña"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+          <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
+        </div>
+
+        <ion-button color="primary"expand="block" class="submit" type="submit" [disabled]="form.invalid">
+          Iniciar sesión
+        </ion-button>
       </form>
-       <ion-button expand="block" size="small" fill="solid" color="secondary" routerLink="/registro-opciones">
-        <p>Crear usuario</p>
-       </ion-button>          
-    </ion-list>
+      
+    </ion-text>
+    
   </ion-content>
 

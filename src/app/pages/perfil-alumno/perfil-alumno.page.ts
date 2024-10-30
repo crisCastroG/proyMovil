@@ -13,7 +13,6 @@ export class PerfilAlumnoPage implements OnInit {
   ionViewDidEnter() {
     this.menu.isEnabled('main-menu').then((enabled) => {
       if (!enabled) {
-        this.menu.enable(false);
         this.menu.enable(true,'main-content');
       }
     });

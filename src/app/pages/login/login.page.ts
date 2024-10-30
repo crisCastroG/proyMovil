@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Usuario } from 'src/app/interfaces/usuario';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/models/user.model';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,31 @@ import { Usuario } from 'src/app/interfaces/usuario';
 })
 export class LoginPage implements OnInit {
 
-  constructor(private router:Router) { }
+  firebaseSvc = inject(FirebaseService);
+
+  form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password : new FormControl ('',[Validators.required])
+  })
+
+  submit(){
+    if(this.form.valid){
+      this.firebaseSvc.signIn(this.form.value as User).then(res => {
+        console.log(res);
+      })
+    }
+  }
+
+  
+  ngOnInit() {
+  }
+
+
+  
+
+
+
+  /*constructor(private router:Router) { }
 
   mensaje:string=''
   usr:Usuario={
@@ -17,8 +42,6 @@ export class LoginPage implements OnInit {
     password:''
   }
 
-  ngOnInit() {
-  }
 
   
   onSubmit(){
@@ -30,6 +53,6 @@ export class LoginPage implements OnInit {
     else{
       this.mensaje='Acceso Denegado';
     }
-  }
+  }*/
 
 }
