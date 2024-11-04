@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
   selector: 'app-encabezado',
@@ -9,6 +10,8 @@ import { MenuController } from '@ionic/angular';
 export class EncabezadoComponent  implements OnInit {
 
   constructor(private menu: MenuController) { }
+
+  firebaseSvc = inject(FirebaseService);
 
   @Input() titulo:string=''
 
@@ -32,6 +35,10 @@ export class EncabezadoComponent  implements OnInit {
   CloseMenu()
   {
     this.menu.close('main-content');  
+  }
+
+  signOut(){
+    this.firebaseSvc.signOut();
   }
 
 

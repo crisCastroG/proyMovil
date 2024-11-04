@@ -20,9 +20,13 @@ export class RegistroPage implements OnInit {
     type: new FormControl('', [Validators.required])
   })
 
-
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
+
+  OnSelectChange($event){
+    //this.form.controls.type = $event.target.value;
+    this.form.controls.type.setValue($event.target.value);
+  }
 
   async submit() {
     if (this.form.valid) {
@@ -36,7 +40,18 @@ export class RegistroPage implements OnInit {
         let uid = res.user.uid;
         this.form.controls.uid.setValue(uid); // Setea el uid del registro al form
 
-        this.setUserInfo(uid); // Guarda al usuario en la base de datos
+        this.setUserInfo(uid); ;// Guarda al usuario en la base de datos
+
+        this.utilsSvc.presentToast({
+          message: 'Registro exitoso',
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        })
+        
+        this.utilsSvc.routerLink('/login');
+        this.form.reset();
+
 
       }).catch(error => {
         this.utilsSvc.presentToast({
@@ -48,6 +63,7 @@ export class RegistroPage implements OnInit {
 
       }).finally(() => {
         loading.dismiss();
+
 
       })
     }
