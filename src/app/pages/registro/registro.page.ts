@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Usuario } from 'src/app/interfaces/usuario';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/models/user.model';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-registro',
@@ -9,26 +11,76 @@ import { Usuario } from 'src/app/interfaces/usuario';
 })
 export class RegistroPage implements OnInit {
 
-  constructor(private router:Router) { }
 
-  mensaje:string=''
-  usr:Usuario={
-    username:'',
-    password:''
+  form = new FormGroup({
+    uid : new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    type: new FormControl('', [Validators.required])
+  })
+
+
+  firebaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
+
+  async submit() {
+    if (this.form.valid) {
+
+      const loading = await this.utilsSvc.loading();
+      await loading.present();
+
+      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
+        await this.firebaseSvc.updateUser(this.form.value.name);
+
+        let uid = res.user.uid;
+        this.form.controls.uid.setValue(uid); // Setea el uid del registro al form
+
+        this.setUserInfo(uid); // Guarda al usuario en la base de datos
+
+      }).catch(error => {
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+
+      }).finally(() => {
+        loading.dismiss();
+
+      })
+    }
+  }
+
+  async setUserInfo(uid : string) {
+    if (this.form.valid) {
+
+      const loading = await this.utilsSvc.loading();
+      await loading.present();
+      delete this.form.value.password;
+
+      let path = 'users/${uid}';
+
+      this.firebaseSvc.setDocument(path, this.form.value).then(async res => {
+        
+        this.utilsSvc.saveInLocalStorage('user', this.form.value)
+
+      }).catch(error => {
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+
+      }).finally(() => {
+        loading.dismiss();
+
+      })
+    }
   }
 
   ngOnInit() {
-  }
-
-  
-  onSubmit(){
-    console.log(this.usr);
-    if(this.usr.username=="wacoldo" && this.usr.password=="123"){
-      console.log("Acceso ok");
-        this.router.navigate(['/login'])
-    }
-    else{
-      this.mensaje='Acceso Denegado';
-    }
   }
 }

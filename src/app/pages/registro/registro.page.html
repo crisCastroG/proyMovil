@@ -1,40 +1,49 @@
 <ion-header>
   <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> 
 
   <ion-content class="ion-padding">
     <ion-text color="secondary" class="ion-text-center">
-      <h1>Crear cuenta Docente</h1>
+      <h1>Registrar usuario</h1>
+
+      <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()">
+
+        <app-custom-input autocomplete="name" [control]="form.controls.name" type="text" labelPlacement="floating" label="Nombre Completo"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+          <div *ngIf="form.controls.name.errors?.['required']">El nombre de usuario es obligatorio</div>
+          <div *ngIf="form.controls.name.errors?.['minLength']">El nombre debe tener almenos 4 </div>
+        </div>
+
+        <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" labelPlacement="floating" label="Correo"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+          <div *ngIf="form.controls.email.errors?.['required']">El correo es obligatorio</div>
+          <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
+        </div>
+
+        <app-custom-input autocomplete="contraseña" [control]="form.controls.password" type="password" labelPlacement="floating" label="Contraseña"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+          <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
+        </div>
+
+        <ion-item>
+          <ion-select label="Tipo de Cuenta"  label-placement="floating">
+            <ion-select-option value="alumno">Apple</ion-select-option>
+            <ion-select-option value="profesor">Banana</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" type="submit" size="small" [disabled]="form.invalid">
+          <ion-text color="dark">
+            <p>Crear Usuario</p>
+          </ion-text>
+        </ion-button>
+      </form>
+      
     </ion-text>
-    <ion-list>
-      <form #formulario="ngForm">
-        <ion-list>
-          <ion-list>                    
-            <ion-item>
-              <ion-input label="Correo" labelPlacement="floating" type="email"  placeholder=""></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-input label="Nombre completo" labelPlacement="floating"  placeholder="Ingrese su nombre de usuario"></ion-input>
-            </ion-item>          
-            <ion-item>
-              <ion-input label="Contraseña" labelPlacement="floating"  type="password"></ion-input>
-            </ion-item>        
-            <ion-item>
-              <ion-input label="Confirme contraseña" labelPlacement="floating"  type="password" value=""></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-list>
-        <ion-button expand="block" color="primary"  labelPlacement="floating" type="submit" size="small" routerLink="/login" [disabled]="formulario.invalid" >
-          <ion-text color="light">
-            <p>Crear cuenta Docente</p>
-          </ion-text>
-        </ion-button>
-        <ion-button expand="block" color="secondary"  labelPlacement="floating" type="submit" size="small" routerLink="/registro-opciones" [disabled]="formulario.invalid" >
-          <ion-text color="light">
-            <p>Volver</p>
-          </ion-text>
-        </ion-button>
-      </form>          
-    </ion-list>
+    
   </ion-content>
+
