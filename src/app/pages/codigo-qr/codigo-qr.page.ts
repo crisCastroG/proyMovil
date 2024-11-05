@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-codigo-qr',
   templateUrl: './codigo-qr.page.html',
   styleUrls: ['./codigo-qr.page.scss'],
 })
-export class CodigoQrPage implements OnInit {
+export class CodigoQrPage  {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  
 
 }
