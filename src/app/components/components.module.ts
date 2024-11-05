@@ -15,7 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     IonicModule,
     ComponentsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    
   ],
   exports:[EncabezadoComponent,EncabezadoAlumnoComponent, CustomInputComponent]
   

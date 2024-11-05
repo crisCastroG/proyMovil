@@ -12,7 +12,7 @@ export const environment = {
     storageBucket: "proyectomovilasistencia.appspot.com",
     messagingSenderId: "329190217882",
     appId: "1:329190217882:web:dacaf73136ac688c366723"
-  };
+  }
   
 };
 

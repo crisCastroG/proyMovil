@@ -9,19 +9,21 @@
 
       <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()">
 
-        <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" label="Correo"></app-custom-input>
+        <app-custom-input autocomplete="email" [control]="form.controls.email" type="email" labelPlacement="floating" label="Correo"></app-custom-input>
         <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
           <div *ngIf="form.controls.email.errors?.['required']">El correo es obligatorio</div>
           <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
         </div>
 
-        <app-custom-input autocomplete="contraseña" [control]="form.controls.password" type="password" label="Contraseña"></app-custom-input>
+        <app-custom-input autocomplete="contraseña" [control]="form.controls.password" type="password" labelPlacement="floating" label="Contraseña"></app-custom-input>
         <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
           <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
         </div>
 
-        <ion-button color="primary"expand="block" class="submit" type="submit" [disabled]="form.invalid">
-          Iniciar sesión
+        <ion-button expand="block" color="primary" type="submit" size="small" [disabled]="form.invalid">
+          <ion-text color="dark">
+            <p>Iniciar sesión</p>
+          </ion-text>
         </ion-button>
       </form>
       
