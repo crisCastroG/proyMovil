@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,8 @@ import { UtilsService } from 'src/app/services/utils.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+
+  constructor(private menu: MenuController) { }
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -19,6 +22,11 @@ export class LoginPage implements OnInit {
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
+
+  ionViewWillEnter(){
+    this.menu.enable(false);
+  }
+
 
   async submit() {
     if (this.form.valid) {

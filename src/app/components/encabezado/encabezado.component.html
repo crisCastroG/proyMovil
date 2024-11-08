@@ -1,55 +1,15 @@
-<ion-menu contentId="main-content" side="end">
   <ion-header>
-    <ion-toolbar color="secondary">
-      <ion-title color="light">Wacoldo Escobar</ion-title>
-      <div class="ion-activatable ripple-parent circle" slot="end">
-        <ion-icon name="person-circle-outline" color="light" size="large" class="ion-padding" routerLink="/perfil-docente"></ion-icon>
-        <ion-ripple-effect type="unbounded"></ion-ripple-effect>
-      </div>
-      
+    <ion-toolbar color="primary">
+      <ion-title>AttendMe</ion-title>
+      <ion-buttons slot="primary" >
+        <ion-button expand="block" fill="clear" shape="round" routerLink="/home">
+          <ion-icon slot="start" name="home-sharp"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
     </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list color="tertiary">
-      <ion-item detail="true" routerLink="/generar-qr">
-        <ion-icon name="qr-code-outline" slot="start"></ion-icon>
-        <ion-label>Generar QR</ion-label>
-      </ion-item>
-      <ion-item detail="true" routerLink="/asignaturas">
-        <ion-label>Asistencias</ion-label>
-        <ion-icon name="book-outline" slot="start" color=""></ion-icon>
-      </ion-item>
-      <ion-item detail="true" routerLink="/registro-asignatura">
-        <ion-label>Registrar Asignaturas</ion-label>
-        <ion-icon name="add" slot="start" color=""></ion-icon>
-      </ion-item>
-    </ion-list>
-    <ion-grid>
-      <ion-row class="ion-justify-content">
-        <ion-col size="2">
-        </ion-col>
-        <ion-col size="8" style="text-align: center;">
-          <ion-button expand="" size="small" fill="outline" color="danger" (onClick)="signOut()">
-            <p>Cerrar Sesión</p>
-           </ion-button>
-        </ion-col>
-        <ion-col size="2">
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  </ion-header> 
 
-  </ion-content>
-</ion-menu>
-<ion-header id="main-content">
-  <ion-toolbar color="primary">
-    <ion-title>AttendMe</ion-title>
-    <ion-buttons slot="primary" >
-      <ion-button expand="block" fill="clear" shape="round" routerLink="/home">
-        <ion-icon slot="start" name="home-sharp"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-menu-button (ionNavWillChange)="CloseMenu()"></ion-menu-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header> 
+

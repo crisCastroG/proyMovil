@@ -1,6 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { FirebaseService } from '../../services/firebase.service';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-encabezado',
@@ -9,27 +10,42 @@ import { FirebaseService } from '../../services/firebase.service';
 })
 export class EncabezadoComponent  implements OnInit {
 
-  constructor(private menu: MenuController) { }
+  constructor(private menu: MenuController, private router: Router) { }
 
   firebaseSvc = inject(FirebaseService);
 
   @Input() titulo:string=''
 
-  ngOnInit() {}
-
-  ionViewDidEnter() {
-    this.menu.isEnabled('main-content').then((enabled) => {
-      if (enabled) {
-        this.menu.enable(false, 'main-content');
-        this.menu.enable(true,'main-content');
-        this.menu.open('main-content');
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.miFuncionAlCambiarPagina();
       }
+
+      if (event instanceof NavigationStart) {
+        this.miFuncionAlIniciarPagina();
+      }
+      
     });
+
   }
+
+  miFuncionAlIniciarPagina() {
+    console.log('pagina iniciada');
+    
+  }
+
+  miFuncionAlCambiarPagina() {
+    console.log('pagina cambiada');
+    
+  }
+
 
   OnClick()
   {
-    this.menu.close('main-content');   
+    console.log("onc")
+    this.menu.close('main-content');
+    this.menu.open('main-content');
   }
 
   CloseMenu()
@@ -38,6 +54,7 @@ export class EncabezadoComponent  implements OnInit {
   }
 
   signOut(){
+    console.log("logout");
     this.firebaseSvc.signOut();
   }
 

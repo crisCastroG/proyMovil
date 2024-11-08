@@ -47,3 +47,11 @@
     color: rgb(26, 81, 233);
     text-decoration: underline;
 }
+
+.small-modal {
+  --width: 300px;
+  --height: 300px;
+  --border-radius: 8px;
+  --max-width: 90%; 
+  --max-height: 90%;
+}

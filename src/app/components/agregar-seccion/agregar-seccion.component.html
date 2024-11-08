@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Agregar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+  <ion-item>
+    <ion-label position="stacked">Nombre de la Sección</ion-label>
+    <ion-input [(ngModel)]="sectionName" placeholder="Ingrese sigla o número de sección."></ion-input>
+    <ion-text color="danger">
+      <p>{{message}}</p>
+    </ion-text>
+  </ion-item>
+  <ion-footer>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6"><ion-button expand="full" color="primary" (click)="confirm()">Confirmar</ion-button></ion-col>
+        <ion-col size="6"><ion-button expand="full" color="secondary" (click)="cancel()">Cancelar</ion-button></ion-col>
+      </ion-row>
+    </ion-grid>
+    
+  </ion-footer>

@@ -5,25 +5,14 @@
       Lista de Asignaturas
     </h1>
     <ion-accordion-group>
-      <ion-accordion value="first" toggleIcon="caret-down-circle" toggleIconSlot="start">
+      <ion-accordion *ngFor="let a of asignaturas"  toggleIcon="caret-down-circle" toggleIconSlot="start">
         <ion-item slot="header" color="light">
-          <ion-label>Aplicaciones moviles</ion-label>
+          <ion-label>{{a.nombAsig}}</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion 002</div>
+        <div *ngFor="let s of a.secciones" class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion {{s.nombSeccion}}</div>
+        <div class="ion-padding" slot="content" (click)="openAddSectionModal(a.id)" >Agregar seccion <ion-icon slot="end" name="add-circle-outline" size="normal"></ion-icon></div>
       </ion-accordion>
-      <ion-accordion value="second" toggleIcon="caret-down-circle" toggleIconSlot="start">
-        <ion-item slot="header" color="light">
-          <ion-label>Desarrollo Orientado a Objetos</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle">Seccion 004</div>
-        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle">Seccion 001</div>
-      </ion-accordion>
-      <ion-accordion value="third" toggleIcon="caret-down-circle" toggleIconSlot="start">
-        <ion-item slot="header" color="light">
-          <ion-label>Programacion web</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion 006</div>
-      </ion-accordion>
+      
     </ion-accordion-group>
     
 </ion-content>

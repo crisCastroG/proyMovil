@@ -1,40 +1,31 @@
 <app-encabezado></app-encabezado>
 <ion-content class="ion-padding">
-  <ion-list>
+  <form [formGroup]="formAsignatura" (ngSubmit)="agregarAsignatura()">
     <ion-item>
-      <ion-input
-        label="Sigla Asignatura"
-        labelPlacement="stacked"
-        [clearInput]="true"
-        placeholder="Ingrese la sigla de la asignatura"
-      >
+      <ion-input label="Sigla Asignatura" labelPlacement="stacked" [clearInput]="true" type="text"
+        placeholder="Ingrese la sigla de la asignatura" [formControl]="formAsignatura.controls.codAsig">
       </ion-input>
     </ion-item>
-  
+    <div class="validators" *ngIf="formAsignatura.controls.codAsig.errors && formAsignatura.controls.codAsig.touched">
+      <div *ngIf="formAsignatura.controls.codAsig.errors?.['required']">La sigla es obligatoria</div>
+    </div>
     <ion-item>
-      <ion-input
-        label="Nombre Asignatura"
-        labelPlacement="stacked"
-        type="text"
-        [clearInput]="true"
-        placeholder="Ingrese el nombre de la asignatura"
-      >
+      <ion-input label="Nombre Asignatura" labelPlacement="stacked" type="text" [clearInput]="true"
+        placeholder="Ingrese el nombre de la asignatura" [formControl]="formAsignatura.controls.nombAsig">
       </ion-input>
+      <div class="validators"
+        *ngIf="formAsignatura.controls.nombAsig.errors && formAsignatura.controls.nombAsig.touched">
+        <div *ngIf="formAsignatura.controls.nombAsig.errors?.['required']">El nombre es obligatorio</div>
+      </div>
     </ion-item>
-  
-    <ion-item>
-      <ion-input
-        label="Numero de seccion"
-        labelPlacement="stacked"
-        type="number"
-        placeholder="Ingrese el numero de la seccion"
-      >
-      </ion-input>
-    </ion-item>
-  </ion-list>
-  <ion-button color="success" expand="full" routerLink="/home">
-  <ion-icon slot="end" name="save"></ion-icon>
-    Guardar
+    <ion-button color="success" expand="full" type="submit">
+      <ion-icon slot="end" name="save" ></ion-icon>
+      Guardar
+    </ion-button>
+  </form>
 
-  </ion-button>
+
+
+
+
 </ion-content>
