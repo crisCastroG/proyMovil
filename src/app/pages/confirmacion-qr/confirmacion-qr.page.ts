@@ -6,6 +6,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { DetalleAsignatura } from 'src/app/models/detalle_asignatura.model';
 import { Asistencia } from 'src/app/models/asistencia.model';
 import { QrCode } from '../../models/qrCode.model';
+import { Geolocation } from '@capacitor/geolocation';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-confirmacion-qr',
