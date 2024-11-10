@@ -70,8 +70,9 @@ export class AsignaturaDetallePage implements OnInit {
         let cantidadAsistentes : number = 0;
         asistentes.forEach(asistente => {
           cantidadAsistentes += 1;
-        })
+        });
         asistencia.numeroAsistentes = cantidadAsistentes;
+        sub.unsubscribe();
       }
     });
   }
@@ -82,6 +83,8 @@ export class AsignaturaDetallePage implements OnInit {
       idAsistencia : idAsistencia,
       idAsignatura : this.detalleAsignatura().id_asignatura,
       idSeccion : this.detalleAsignatura().id_seccion,
+      nombreAsignatura: this.detalleAsignatura().nombreAsignatura,
+      siglaAsignatura: this.detalleAsignatura().siglaAsignatura,
       fecha : fecha,
       hora : hora,
       numeroAsistentes : numeroAsistentes

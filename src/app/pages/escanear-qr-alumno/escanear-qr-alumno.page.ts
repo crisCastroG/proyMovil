@@ -14,6 +14,7 @@ import { Seccion } from 'src/app/models/seccion.model';
 import { Asignatura } from 'src/app/models/asignatura.model';
 import { Profesor } from 'src/app/models/profesor.model';
 import { AsignaturaAlumno } from 'src/app/models/asignatura_alumno.model';
+import { QrCode } from '../../models/qrCode.model';
 
 @Component({
   selector: 'app-escanear-qr-alumno',
@@ -71,7 +72,10 @@ export class EscanearQrAlumnoPage implements OnInit {
     const loading = await this.utilsSvc.loading();
     await loading.present();
 
-    let document = await getDoc(doc(getFirestore(), qrResult));
+    let qrData : QrCode = JSON.parse(qrResult);
+
+    let path = `users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}`
+    let document = await getDoc(doc(getFirestore(), path));
     let asistenciaData = document.data();
 
     // Checkear si la asistencia existe
@@ -128,40 +132,39 @@ export class EscanearQrAlumnoPage implements OnInit {
       hora: new Date().toLocaleTimeString(),
     }
 
-    this.firebaseSvc.setDocument(qrResult + '/asistentes/' + this.user().uid, asistente).then(async res => {
-
-      let asistenciaData = (await getDoc(doc(getFirestore(), qrResult))).data() as Asistencia;
-      let seccionData = (await getDoc(doc(getFirestore(), qrResult).parent.parent)).data() as Seccion;
-      let asignaturaData = (await getDoc(doc(getFirestore(), qrResult).parent.parent.parent.parent)).data() as Asignatura;
-      let profesorData =  (await getDoc(doc(getFirestore(), qrResult).parent.parent.parent.parent.parent.parent)).data() as Profesor;
-
+    this.firebaseSvc.setDocument(`users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}/asistentes/${this.user().uid}`, asistente).then(async res => {
+      
       let detalleAsistencia : DetalleAsistencia = {
-        idAsignatura : asignaturaData.id,
-        idSeccion : seccionData.id,
-        nombreAsignatura : asignaturaData.nombAsig,
-        siglaAsignatura : asignaturaData.codAsig,
-        nombreSeccion : seccionData.nombSeccion,
-        fecha : asistenciaData.fecha,
-        hora : asistenciaData.hora
+        idAsignatura : qrData.id_asignatura,
+        idSeccion : qrData.id_seccion,
+        nombreAsignatura : qrData.nombreAsignatura,
+        siglaAsignatura : qrData.siglaAsignatura,
+        nombreSeccion : qrData.nombreSeccion,
+        fecha : qrData.fecha,
+        hora : qrData.hora,
       }
 
       // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
       let document = await getDoc(doc(getFirestore(), `users/${this.user().uid}`));
       let asignaturaAlumnoData = document.data();
 
-      if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaData.id)){
+      let asignaturaAlumno : AsignaturaAlumno = {
+        idAsignatura : qrData.id_asignatura,
+        idSeccion : qrData.id_seccion,
+        idProfesor : qrData.id_profesor,
+        nombreAsignatura : qrData.nombreAsignatura,
+        siglaAsignatura : qrData.siglaAsignatura,
+        nombreSeccion : qrData.nombreSeccion,
+        nombreProfesor : qrData.nombreProfesor
+      }
 
-        let asignaturaAlumno : AsignaturaAlumno = {
-          idAsignatura : detalleAsistencia.idAsignatura,
-          idSeccion : detalleAsistencia.idSeccion,
-          idProfesor : profesorData.idProfesor,
-          nombreAsignatura : asignaturaData.nombAsig,
-          siglaAsignatura : asignaturaData.codAsig,
-          nombreSeccion : asignaturaData.nombAsig,
-          nombreProfesor : profesorData.nombreProfesor
+      if(asignaturaAlumnoData['asignaturas_alumno'])
+      {
+        if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaAlumno.idAsignatura)){
+          await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`,asignaturaAlumno);
         }
-
-        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaData.id}`,asignaturaAlumno);
+      } else {
+        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`,asignaturaAlumno) 
       }
 
       this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
