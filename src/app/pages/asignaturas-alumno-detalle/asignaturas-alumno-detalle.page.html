@@ -1,14 +1,14 @@
 <app-encabezado></app-encabezado>
 <ion-content class="ion-padding">
-  <ion-card color="tertiary">
-    <ion-card-header >
-      <ion-card-subtitle>pry21321</ion-card-subtitle>
-      <ion-card-title>Programacion web</ion-card-title>
-    </ion-card-header> 
-    <ion-card-content>
-      Sección 2 - Profesor Ernesto Lopez
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-card-header >
+        <ion-card-subtitle>{{siglaAsignatura}}</ion-card-subtitle>
+        <ion-card-title>{{nombreAsignatura}}</ion-card-title>
+      </ion-card-header> 
+      <ion-card-content>  
+        Sección {{nombreSeccion}}<br>Profesor {{nombreProfesor}}
+      </ion-card-content>
+    </ion-card>
   <ion-button color="secondary" expand="block" shape="round" routerLink="/asignaturas-alumno">
     Volver atrás
   </ion-button>
@@ -23,67 +23,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>01/09/2024 08:00</td>
-        <td>09:00</td>
-        <td><span class="estado presente">Presente</span></td>
+      <tr *ngFor="let asistencia of asistenciasAlumno" >
+        <td>{{asistencia.fecha}} {{asistencia.hora}}</td>
+        <td>{{asistencia.horaMarcada}}</td>
+        <td *ngIf="asistencia.estadoPresente=='presente'; else estadoAusente"><span class="estado presente">Presente</span></td>
+        <ng-template #estadoAusente><td><span class="estado ausente">Ausente</span></td></ng-template>
         <ion-ripple-effect type="bounded"></ion-ripple-effect>
       </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>02/09/2024 08:00</td>
-        <td>No marcó</td>
-        <td><span class="estado ausente">Ausente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>03/09/2024 08:00</td>
-        <td>09:05</td>
-        <td><span class="estado presente">Presente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>04/09/2024 08:00</td>
-        <td>No marcó</td>
-        <td><span class="estado ausente">Ausente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>05/09/2024 08:00</td>
-        <td>08:55</td>
-        <td><span class="estado presente">Presente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>06/09/2024 08:00</td>
-        <td>No marcó</td>
-        <td><span class="estado ausente">Ausente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>07/09/2024 08:00</td>
-        <td>09:10</td>
-        <td><span class="estado presente">Presente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>08/09/2024 08:00</td>
-        <td>No marcó</td>
-        <td><span class="estado ausente">Ausente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>09/09/2024 08:00</td>
-        <td>09:15</td>
-        <td><span class="estado presente">Presente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/detalle-asistencia">
-        <td>10/09/2024 08:00</td>
-        <td>No marcó</td>
-        <td><span class="estado ausente">Ausente</span></td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-    </tbody>
   </table>
 </div>
 </ion-content>

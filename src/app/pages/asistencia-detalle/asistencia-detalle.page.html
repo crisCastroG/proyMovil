@@ -2,7 +2,7 @@
 <ion-content class="ion-padding">
   <ion-card>
     <ion-card-header>
-      <ion-card-title>{{nombreAsignatura}} </ion-card-title>
+      <ion-card-title>{{nombreAsignatura}}</ion-card-title>
       <ion-card-subtitle>{{siglaAsignatura}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
@@ -29,7 +29,6 @@
         <tr *ngFor="let asistente of asistentes" >
           <td>{{asistente.nombreCompleto}}</td>
           <td>{{asistente.hora}}</td>
-          <ion-ripple-effect type="bounded"></ion-ripple-effect>
         </tr>
       </tbody>
     </table>

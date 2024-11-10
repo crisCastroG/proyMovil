@@ -46,7 +46,7 @@ export class AsistenciaDetallePage implements OnInit {
     this.siglaAsignatura = this.detalleAsistencia().siglaAsignatura;
     this.nombreSeccion = this.detalleAsistencia().nombreSeccion;
 
-    this.getAsistentes(this.detalleAsistencia().idAsignatura, this.detalleAsistencia().idSeccion, this.detalleAsistencia().idSeccion);
+    this.getAsistentes(this.detalleAsistencia().idAsignatura, this.detalleAsistencia().idSeccion, this.detalleAsistencia().idAsistencia);
 
   }
 
@@ -56,6 +56,7 @@ export class AsistenciaDetallePage implements OnInit {
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
+        console.log(res);
         this.asistentes = res;
         sub.unsubscribe();
       }
