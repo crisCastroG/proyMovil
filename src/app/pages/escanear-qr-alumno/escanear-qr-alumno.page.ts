@@ -12,6 +12,8 @@ import { User } from 'src/app/models/user.model';
 import { DetalleAsistencia } from 'src/app/models/detalle_asistencia.model';
 import { Seccion } from 'src/app/models/seccion.model';
 import { Asignatura } from 'src/app/models/asignatura.model';
+import { Profesor } from 'src/app/models/profesor.model';
+import { AsignaturaAlumno } from 'src/app/models/asignatura_alumno.model';
 
 @Component({
   selector: 'app-escanear-qr-alumno',
@@ -131,13 +133,35 @@ export class EscanearQrAlumnoPage implements OnInit {
       let asistenciaData = (await getDoc(doc(getFirestore(), qrResult))).data() as Asistencia;
       let seccionData = (await getDoc(doc(getFirestore(), qrResult).parent.parent)).data() as Seccion;
       let asignaturaData = (await getDoc(doc(getFirestore(), qrResult).parent.parent.parent.parent)).data() as Asignatura;
+      let profesorData =  (await getDoc(doc(getFirestore(), qrResult).parent.parent.parent.parent.parent.parent)).data() as Profesor;
 
       let detalleAsistencia : DetalleAsistencia = {
+        idAsignatura : asignaturaData.id,
+        idSeccion : seccionData.id,
         nombreAsignatura : asignaturaData.nombAsig,
         siglaAsignatura : asignaturaData.codAsig,
         nombreSeccion : seccionData.nombSeccion,
         fecha : asistenciaData.fecha,
         hora : asistenciaData.hora
+      }
+
+      // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
+      let document = await getDoc(doc(getFirestore(), `users/${this.user().uid}`));
+      let asignaturaAlumnoData = document.data();
+
+      if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaData.id)){
+
+        let asignaturaAlumno : AsignaturaAlumno = {
+          idAsignatura : detalleAsistencia.idAsignatura,
+          idSeccion : detalleAsistencia.idSeccion,
+          idProfesor : profesorData.idProfesor,
+          nombreAsignatura : asignaturaData.nombAsig,
+          siglaAsignatura : asignaturaData.codAsig,
+          nombreSeccion : asignaturaData.nombAsig,
+          nombreProfesor : profesorData.nombreProfesor
+        }
+
+        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaData.id}`,asignaturaAlumno);
       }
 
       this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
