@@ -5,6 +5,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { DetalleAsignatura } from 'src/app/models/detalle_asignatura.model';
 import { Asistencia } from 'src/app/models/asistencia.model';
+import { Geolocation } from '@capacitor/geolocation';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-confirmacion-qr',
@@ -13,7 +15,7 @@ import { Asistencia } from 'src/app/models/asistencia.model';
 })
 export class ConfirmacionQrPage implements OnInit {
 
-  constructor(private router : Router) { }
+  constructor(private router : Router, private alertController: AlertController) { }
 
   utilsSvc = inject(UtilsService);
   firebaseSvc = inject(FirebaseService);
@@ -56,7 +58,21 @@ export class ConfirmacionQrPage implements OnInit {
       await loading.present();
 
       // Aquí se debería calcular los datos de localización para guardarlos
+      const location = await this.saveLocation();
 
+    if (!location) {
+      this.utilsSvc.presentToast({
+        message: 'No se pudo obtener la ubicación',
+        duration: 2500,
+        color: 'primary',
+        position: 'middle'
+      });
+      loading.dismiss();
+      return;
+    } 
+
+     // Muestra el mensaje con la ubicación actual
+     this.presentarMensajeUbicacion(location.latitude, location.longitude);
 
       //
 
@@ -87,7 +103,38 @@ export class ConfirmacionQrPage implements OnInit {
       }).finally(() => {
         loading.dismiss();
 
-      })
-  }
+      });
+    }
+    async saveLocation(): Promise<{ latitude: number, longitude: number } | null> {
+      try {
+        const permission = await Geolocation.requestPermissions();
+        if (permission.location !== 'granted') {
+          console.warn('Permiso de ubicación denegado.');
+          return null;
+        }
+  
+        const position = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 10000,
+        });
+  
+        return {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+      } catch (error) {
+        console.error('Error al obtener la ubicación:', error);
+        return null;
+      }
+    }
+    async presentarMensajeUbicacion(lat: number, lng: number) {
+      const alert = await this.alertController.create({
+        header: 'Ubicación Actual',
+        message: `Tu ubicación es: <br>Latitud: ${lat.toFixed(6)}<br>Longitud: ${lng.toFixed(6)}`,
+        buttons: ['OK']
+      });
+  
+      await alert.present();
+    }
 
 }

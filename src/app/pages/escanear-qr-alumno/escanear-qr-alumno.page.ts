@@ -16,6 +16,7 @@ import { Profesor } from 'src/app/models/profesor.model';
 import { AsignaturaAlumno } from 'src/app/models/asignatura_alumno.model';
 import { Geolocation } from '@capacitor/geolocation';
 
+
 @Component({
   selector: 'app-escanear-qr-alumno',
   templateUrl: './escanear-qr-alumno.page.html',
