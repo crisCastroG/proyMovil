@@ -25,7 +25,7 @@ export class AsignaturasAlumnoPage implements OnInit {
   ngOnInit() {
   }
   
-  ionViewCanEnter(){
+  ionViewWillEnter(){
     this.getAsignaturasAlumno();
   }
 

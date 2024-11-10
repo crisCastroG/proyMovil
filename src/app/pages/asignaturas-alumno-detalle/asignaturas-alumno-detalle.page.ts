@@ -26,7 +26,7 @@ export class AsignaturasAlumnoDetallePage implements OnInit {
   nombreProfesor: string = '';
 
 
-  asistenciasAlumno : AsistenciaAlumno[];
+  asistenciasAlumno : AsistenciaAlumno[] = [];
   asistencias : Asistencia[];
   asistentes : Asistente[];
 

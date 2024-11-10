@@ -10,11 +10,9 @@ import { Asistencia } from 'src/app/models/asistencia.model';
 import { doc, getFirestore } from 'firebase/firestore';
 import { User } from 'src/app/models/user.model';
 import { DetalleAsistencia } from 'src/app/models/detalle_asistencia.model';
-import { Seccion } from 'src/app/models/seccion.model';
-import { Asignatura } from 'src/app/models/asignatura.model';
-import { Profesor } from 'src/app/models/profesor.model';
 import { AsignaturaAlumno } from 'src/app/models/asignatura_alumno.model';
 import { QrCode } from '../../models/qrCode.model';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-escanear-qr-alumno',
@@ -27,6 +25,12 @@ export class EscanearQrAlumnoPage implements OnInit {
   barcodes: Barcode[] = [];
   scanResult = '';
   resultadoAsistencia = '';
+  latitude: number | null = null;
+  longitude: number | null = null;
+  locationMessage: string | null = null; // Variable para mostrar mensaje de ubicación
+  //Ubicacion DUOC: { lat: -36.79538244183323, lng: -73.06152573267023 }; 
+  readonly institutionCoords = { lat: -36.60909853022575, lng: -72.96350965358964 };
+  readonly allowedDistance = 120; // Rango en metros
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
@@ -82,7 +86,7 @@ export class EscanearQrAlumnoPage implements OnInit {
     if (!document.exists()) {
 
       this.utilsSvc.presentToast({
-        message: 'Error de lectura. Asistencia no existente.',
+        message: 'Error de lectura. Inténtelo denuevo.',
         duration: 2500,
         color: 'primary',
         position: 'middle'
@@ -105,7 +109,6 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     // Checkear si está dentro del tiempo para registrar asistencia
     let asistencia = asistenciaData as Asistencia;
-
     let fechaAsistencia = this.convertirStringADate(asistencia.fecha + ' ' + asistencia.hora);
     let fechaAhora = new Date();
     let diferencia = fechaAhora.getTime() - fechaAsistencia.getTime();
@@ -122,9 +125,19 @@ export class EscanearQrAlumnoPage implements OnInit {
     }
 
     // Aquí debería checkear si está lo suficientemente cerca al lugar de la asistencia.
+    const position = await this.checkLocation(); // Obtener ubicación al presionar el botón
+    this.locationMessage = position ? `Ubicación actual: ${this.latitude?.toFixed(6)}, ${this.longitude?.toFixed(6)}` : 'No se pudo obtener la ubicación.';
 
-    //
-    
+    // Verificar si el usuario está en el área permitida
+    if (!position) {
+      this.presentAlert(
+        'Ubicación no permitida',
+        'No estás dentro del área permitida para registrar asistencia. ' + this.locationMessage
+      );
+      loading.dismiss();
+      return;
+    }
+
     // Registrar al alumno en la lista de asistentes
     let asistente: Asistente = {
       uid: this.user().uid,
@@ -190,7 +203,88 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     })
   }
+  async checkLocation(): Promise<boolean> {
+    try {
+      const permission = await Geolocation.checkPermissions();
 
+      // Verificar si los permisos de ubicación están concedidos
+      if (permission.location !== 'granted') {
+        const request = await Geolocation.requestPermissions();
+        if (request.location !== 'granted') {
+          this.presentAlert('Permiso denegado', 'La aplicación necesita acceso a la ubicación para funcionar.');
+          return false; // No se concedieron permisos
+        }
+      }
+
+      // Obtener la posición actual
+      const position = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: true, // Usar alta precisión
+        timeout: 10000, // Tiempo de espera para obtener la ubicación
+      });
+
+      this.latitude = position.coords.latitude; // Asignar latitud
+      this.longitude = position.coords.longitude; // Asignar longitud
+
+      // Mensaje de ubicación
+      this.locationMessage = `Ubicación actual: ${this.latitude.toFixed(6)}, ${this.longitude.toFixed(6)}`;
+
+      const distance = this.calculateDistance(
+        this.institutionCoords.lat,
+        this.institutionCoords.lng,
+        this.latitude,
+        this.longitude
+      );
+
+      return distance <= this.allowedDistance; // Retorna true si está dentro del rango permitido
+    } catch (error) {
+      console.error('Error obteniendo la ubicación:', error);
+
+      // Mensajes de error mejorados
+      let message = 'No se pudo obtener la ubicación. Intenta nuevamente más tarde.';
+      if (error instanceof Error) {
+        if (error.message.includes('Permission denied')) {
+          message = 'La aplicación no tiene permisos para acceder a la ubicación. Por favor, habilítalos en la configuración.';
+        } else if (error.message.includes('Location unavailable')) {
+          message = 'No se pudo obtener la ubicación. Asegúrate de que el GPS esté habilitado y que tengas una buena conexión.';
+        }
+      }
+
+      this.presentAlert('Error de ubicación', message);
+
+      // Limpiar la latitud y longitud
+      this.latitude = null;
+      this.longitude = null;
+      this.locationMessage = message; // Mantener el mensaje en el mismo formato
+
+      return false; // No se pudo obtener la ubicación
+    }
+  }
+
+
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371e3; // Radio de la Tierra en metros
+    const φ1 = (lat1 * Math.PI) / 180;
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distancia en metros
+  }
+
+  async presentAlert(header: string, message: string): Promise<void> {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+    });
+    await alert.present();
+  }
   convertirStringADate(fechaHoraStr) {
     // Divide la fecha y la hora
     let [fecha, hora] = fechaHoraStr.split(" ");
@@ -200,7 +294,6 @@ export class EscanearQrAlumnoPage implements OnInit {
     // Crea un nuevo objeto Date con estos valores
     return new Date(anio, mes - 1, dia, horas, minutos, segundos);
   }
-
 }
 
 /*async requestPermissions(): Promise<boolean> {
