@@ -2,15 +2,15 @@
 
 <ion-content class="ion-padding">
   <ion-card>
-    <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
     <ion-card-header>
-      <ion-card-title>Programacion Web</ion-card-title>
-      <ion-card-subtitle>Seccion 2- Fecha 04/03/2024</ion-card-subtitle>
+      <ion-card-title>{{nombreAsignatura}} </ion-card-title>
+      <ion-card-subtitle>{{siglaAsignatura}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
+      Seccion {{nombreSeccion}} - {{fecha}} {{hora}}
     </ion-card-content>
   </ion-card>
-  <ion-button expand="block" routerLink="/codigo-qr">
+  <ion-button expand="block" (click)="generarCodigoQR()">
     <ion-icon slot="end" name="qr-code"></ion-icon>
     Generar QR
   </ion-button>

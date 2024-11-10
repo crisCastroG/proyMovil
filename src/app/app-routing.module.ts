@@ -14,18 +14,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'botones',
-    loadChildren: () => import('./pages/botones/botones.module').then( m => m.BotonesPageModule)
-  },
-  {
-    path: 'alertas',
-    loadChildren: () => import('./pages/alertas/alertas.module').then( m => m.AlertasPageModule)
-  },
-  {
-    path: 'formulario',
-    loadChildren: () => import('./pages/formulario/formulario.module').then( m => m.FormularioPageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule), canActivate:[noAuthGuard]
   },
@@ -88,18 +76,6 @@ const routes: Routes = [
   {
     path: 'escaneo-exitoso',
     loadChildren: () => import('./pages/escaneo-exitoso/escaneo-exitoso.module').then( m => m.EscaneoExitosoPageModule), canActivate:[authGuard]
-  },
-  {
-    path: 'escaneo-fallido',
-    loadChildren: () => import('./pages/escaneo-fallido/escaneo-fallido.module').then( m => m.EscaneoFallidoPageModule), canActivate:[authGuard]
-  },
-  {
-    path: 'registro-alumno',
-    loadChildren: () => import('./pages/registro-alumno/registro-alumno.module').then( m => m.RegistroAlumnoPageModule)
-  },
-  {
-    path: 'registro-opciones',
-    loadChildren: () => import('./pages/registro-opciones/registro-opciones.module').then( m => m.RegistroOpcionesPageModule)
   },
   {
     path: 'perfil-alumno',

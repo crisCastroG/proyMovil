@@ -2,14 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from '@firebase/auth'
 import { User } from '../models/user.model';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, setDoc, doc, getDoc, collection, addDoc, collectionData, query} from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
+
 
   auth = inject(AngularFireAuth);
   firestore = inject(AngularFireAuth);
@@ -33,6 +34,7 @@ export class FirebaseService {
   signOut(){
     getAuth().signOut();
     localStorage.removeItem('user');
+    localStorage.removeItem('userType');
     this.utilsSvc.routerLink('/login');
   }
 
@@ -58,5 +60,14 @@ export class FirebaseService {
     const ref = collection(getFirestore(),path);
     return collectionData(query(ref,collectionQuery), {idField: 'id'});
   }
+
+  async getAsignatura(userId : string, asignaturaId : string){
+    return (await getDoc(doc(getFirestore(),`users/${userId}/asignaturas_profesor/${asignaturaId}`))).data();
+  }
+  async getSeccion(userId : string, asignaturaId : string, seccionId : string){
+    return (await getDoc(doc(getFirestore(),`users/${userId}/asignaturas_profesor/${asignaturaId}/secciones/${seccionId}`))).data();
+  }
+
+  
 
 }

@@ -8,6 +8,7 @@ import { CodigoQrPageRoutingModule } from './codigo-qr-routing.module';
 
 import { CodigoQrPage } from './codigo-qr.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { QrCodeModule } from 'ng-qrcode';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
     FormsModule,
     IonicModule,
     CodigoQrPageRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    QrCodeModule
   ],
   declarations: [CodigoQrPage]
 })

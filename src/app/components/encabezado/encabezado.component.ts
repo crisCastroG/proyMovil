@@ -1,7 +1,8 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { FirebaseService } from '../../services/firebase.service';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { UtilsService } from 'src/app/services/utils.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-encabezado',
@@ -10,40 +11,23 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 })
 export class EncabezadoComponent  implements OnInit {
 
-  constructor(private menu: MenuController, private router: Router) { }
+  constructor(private menu: MenuController) { }
 
   firebaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
 
   @Input() titulo:string=''
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.miFuncionAlCambiarPagina();
-      }
-
-      if (event instanceof NavigationStart) {
-        this.miFuncionAlIniciarPagina();
-      }
-      
-    });
 
   }
 
-  miFuncionAlIniciarPagina() {
-    console.log('pagina iniciada');
-    
+  user(): User {
+    return this.utilsSvc.getFromLocalStorage('user');
   }
-
-  miFuncionAlCambiarPagina() {
-    console.log('pagina cambiada');
-    
-  }
-
 
   OnClick()
   {
-    console.log("onc")
     this.menu.close('main-content');
     this.menu.open('main-content');
   }
@@ -56,6 +40,14 @@ export class EncabezadoComponent  implements OnInit {
   signOut(){
     console.log("logout");
     this.firebaseSvc.signOut();
+  }
+
+  goHome(){
+    if(this.user().type === 'profesor'){
+      this.utilsSvc.routerLink('home');
+    } else {
+      this.utilsSvc.routerLink('home-alumno');
+    }
   }
 
 

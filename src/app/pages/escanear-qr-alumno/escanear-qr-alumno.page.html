@@ -1,4 +1,4 @@
-<app-encabezado-alumno></app-encabezado-alumno>
+<app-encabezado></app-encabezado>
 
 <ion-content class="ion-text-center ion-justify-content-center">
 <div class="title-container ">
@@ -7,8 +7,12 @@
 </div>
 
 <ion-content class="ion-padding">
-  <ion-button expand="block" routerLink="/escaneo-exitoso">
+  <ion-button expand="block" (click)="startScan()">
     <ion-icon slot="end" name="checkmark"></ion-icon>
-      Registra tu asistencia
+      Escanar QR de asistencia.
    </ion-button>
+
+   <ion-item class="result" *ngIf="resultadoAsistencia">
+    <ion-text color="primary"><p>{{resultadoAsistencia}}</p></ion-text>
+   </ion-item>
 </ion-content>

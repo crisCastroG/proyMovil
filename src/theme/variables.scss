@@ -65,4 +65,25 @@
 	--ion-color-dark-shade: #171717;
 	--ion-color-dark-tint: #313131;
 
+	--ion-background-color: #ffffff;
+}
+
+// Barcode scanning
+body.barcode-scanning-active{
+	visibility: hidden;
+	--background: transparent;
+	--ion-background-color: transparent;
+}
+
+.barcode-scanning-modal{
+	visibility: visible;
+}
+
+@media (prefers-color-scheme: light){
+	.barcode-scanning-active{
+		visibility: hidden;
+		--background: transparent;
+		--ion-background-color: transparent;
+	}
+	
 }

@@ -1,6 +1,10 @@
-import { Alumno } from "./alumno.model";
+import { Asistente } from "./asistente.model";
 
 export interface Asistencia {
-    fecha: string;                   
-    alumnosAsistentes: Alumno[];     
+    id?: string; 
+    fecha?: string;
+    hora?: string;
+    localizacion?: string;
+    numeroAsistentes?: number;                  
+    alumnosAsistentes?: Asistente[];     
   }

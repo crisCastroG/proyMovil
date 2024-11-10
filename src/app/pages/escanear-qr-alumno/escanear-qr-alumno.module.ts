@@ -8,6 +8,7 @@ import { EscanearQrAlumnoPageRoutingModule } from './escanear-qr-alumno-routing.
 
 import { EscanearQrAlumnoPage } from './escanear-qr-alumno.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ComponentsModule } from 'src/app/components/components.module';
     EscanearQrAlumnoPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [EscanearQrAlumnoPage]
+  declarations: [EscanearQrAlumnoPage, BarcodeScanningModalComponent]
 })
 export class EscanearQrAlumnoPageModule {}

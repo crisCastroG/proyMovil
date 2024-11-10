@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AgregarSeccionComponent } from 'src/app/components/agregar-seccion/agregar-seccion.component';
 import { Asignatura } from 'src/app/models/asignatura.model';
+import { DetalleAsignatura } from 'src/app/models/detalle_asignatura.model';
 import { Seccion } from 'src/app/models/seccion.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -22,75 +23,85 @@ export class AsignaturasPage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   formSeccion = new FormGroup({
-    nombSeccion : new FormControl('')
+    nombSeccion: new FormControl('')
   })
 
-  asignaturas : Asignatura[] = [];
+  asignaturas: Asignatura[] = [];
 
   ngOnInit() {
   }
-  
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     this.getAsignaturas();
   }
 
-  user(): User{
+  user(): User {
     return this.utilsSvc.getFromLocalStorage('user');
   }
 
-    // Modal para abrir ventana para agregar seccion
-    async openAddSectionModal(id: string) {
-      const modal = await this.modalCtrl.create({
-        component: AgregarSeccionComponent,
-        cssClass: 'small-modal'
-      });
-  
-      await modal.present();
-  
-      // Captura el valor cuando el usuario confirma
-      const { data, role } = await modal.onWillDismiss();
-  
-      if (role === 'confirm' && data) {
-        this.addSeccion(id, data)     
-      }
+  redirigirDetalle(idAsignatura : string, idSeccion : string, nombreAsignatura: string, siglaAsignatura : string, nombreSeccion : string){
+    let detalleAsignatura: DetalleAsignatura = {
+        id_asignatura: idAsignatura,          
+        id_seccion: idSeccion,
+        nombreAsignatura : nombreAsignatura,
+        siglaAsignatura : siglaAsignatura,          
+        nombreSeccion: nombreSeccion,       
     }
+    this.utilsSvc.saveInLocalStorage('seleccionAsignatura', detalleAsignatura);
+    this.utilsSvc.routerLink('asignatura-detalle');
+  }
 
-  getAsignaturas(){
+  // Modal para abrir ventana para agregar seccion
+  async openAddSectionModal(id: string) {
+    const modal = await this.modalCtrl.create({
+      component: AgregarSeccionComponent,
+      cssClass: 'small-modal'
+    });
+
+    await modal.present();
+
+    // Captura el valor cuando el usuario confirma
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'confirm' && data) {
+      this.addSeccion(id, data)
+    }
+  }
+
+  getAsignaturas() {
     let path = `users/${this.user().uid}/asignaturas_profesor`;
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         this.asignaturas = res;
         this.asignaturas.forEach(asignatura => {
-          console.log(asignatura);
           this.getSecciones(asignatura.id, asignatura)
-         });
+        });
         sub.unsubscribe();
       }
     })
   }
 
-  getSecciones(id: string, asignatura : Asignatura){
+  getSecciones(id: string, asignatura: Asignatura) {
     let path = `users/${this.user().uid}/asignaturas_profesor/${id}/secciones`;
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
-        console.log(res);
         asignatura.secciones = res;
         sub.unsubscribe();
       }
     })
-    
+
   }
 
-  async addSeccion(id: string, nombSeccion : string){
+  async addSeccion(id: string, nombSeccion: string) {
 
     const loading = await this.utilsSvc.loading();
-      await loading.present();
+    await loading.present();
 
     let path = `users/${this.user().uid}/asignaturas_profesor/${id}/secciones`
     this.formSeccion.controls.nombSeccion.setValue(nombSeccion)
-    this.firebaseSvc.addDocument(path,this.formSeccion.value).then(async res => {
+    this.firebaseSvc.addDocument(path, this.formSeccion.value).then(async res => {
 
       this.getAsignaturas();
 
@@ -101,7 +112,7 @@ export class AsignaturasPage implements OnInit {
         position: 'bottom'
       })
 
-      
+
     }).catch(error => {
       this.utilsSvc.presentToast({
         message: error.message,
@@ -114,6 +125,8 @@ export class AsignaturasPage implements OnInit {
       loading.dismiss();
 
     })
+
+
 
   }
 

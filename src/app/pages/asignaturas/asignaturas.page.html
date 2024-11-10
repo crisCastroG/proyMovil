@@ -1,18 +1,24 @@
 <app-encabezado></app-encabezado>
 
 <ion-content class="ion-padding">
-    <h1 class="ion-text-center ion-margin">
-      Lista de Asignaturas
-    </h1>
-    <ion-accordion-group>
-      <ion-accordion *ngFor="let a of asignaturas"  toggleIcon="caret-down-circle" toggleIconSlot="start">
-        <ion-item slot="header" color="light">
-          <ion-label>{{a.nombAsig}}</ion-label>
-        </ion-item>
-        <div *ngFor="let s of a.secciones" class="ion-padding" slot="content" routerLink="/asignatura-detalle" >Seccion {{s.nombSeccion}}</div>
-        <div class="ion-padding" slot="content" (click)="openAddSectionModal(a.id)" >Agregar seccion <ion-icon slot="end" name="add-circle-outline" size="normal"></ion-icon></div>
-      </ion-accordion>
-      
-    </ion-accordion-group>
-    
+  <h1 class="ion-text-center ion-margin">
+    Lista de Asignaturas
+  </h1>
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let a of asignaturas" toggleIcon="caret-down-circle" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>{{a.nombAsig}}</ion-label>
+      </ion-item>
+      <div *ngFor="let s of a.secciones" class="ion-padding" slot="content"
+        (click)="redirigirDetalle(a.id,s.id, a.nombAsig, a.codAsig, s.nombSeccion)">Seccion {{s.nombSeccion}}</div>
+      <div class="ion-padding" slot="content" (click)="openAddSectionModal(a.id)">Agregar seccion <ion-icon slot="end"
+          name="add-circle-outline" size="normal"></ion-icon></div>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-button style="margin-top: 20px;" expand="block" color="secondary" size="small" routerLink="/registro-asignatura">
+    <ion-text color="">
+      <p>Agregar asignatura</p>
+    </ion-text>
+  </ion-button>
+
 </ion-content>

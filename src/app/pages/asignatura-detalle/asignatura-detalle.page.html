@@ -2,85 +2,29 @@
 <ion-content class="ion-padding">
   <ion-card color="tertiary">
     <ion-card-header >
-      <ion-card-subtitle>pry21321</ion-card-subtitle>
-      <ion-card-title>Programacion web</ion-card-title>
+      <ion-card-subtitle>{{siglaAsignatura}}</ion-card-subtitle>
+      <ion-card-title>{{nombreAsignatura}}</ion-card-title>
     </ion-card-header> 
     <ion-card-content>
-      Sección 2
+      Seccion {{nombreSeccion}}
     </ion-card-content>
   </ion-card>
   <ion-button color="secondary" expand="block" shape="round" routerLink="/asignaturas">
     Volver atrás
   </ion-button>
-<h4>Lista de asistencias, seleccione una para ver detalle.</h4>
+<h4 style="text-align: center;">Lista de asistencias, seleccione una para ver detalle.</h4>
 <div class="table-container">
   <table>
     <thead>
       <tr>
-        <th>Nombre Asignatura</th>
         <th>Fecha Asistencia</th>
         <th>Número de Presentes</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>01/09/2024 10:30</td>
-        <td>25</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>02/09/2024 10:30</td>
-        <td>30</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>03/09/2024 10:30</td>
-        <td>22</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>04/09/2024 10:30</td>
-        <td>28</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>05/09/2024 10:30</td>
-        <td>32</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>06/09/2024 10:30</td>
-        <td>26</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>07/09/2024 10:30</td>
-        <td>29</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>08/09/2024 10:30</td>
-        <td>33</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>09/09/2024 10:30</td>
-        <td>20</td>
-        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-      </tr>
-      <tr class="ion-activatable" routerLink="/asistencia-detalle">
-        <td>Programación Web</td>
-        <td>10/09/2024 10:30</td>
-        <td>35</td>
+      <tr class="ion-activatable" *ngFor="let a of asistencias" (click)="redirigirAlDetalle(a.id, a.fecha, a.hora, a.numeroAsistentes)" >
+        <td>{{a.fecha}} {{a.hora}}</td>
+        <td>{{a.numeroAsistentes}}</td>
         <ion-ripple-effect type="bounded"></ion-ripple-effect>
       </tr>
     </tbody>

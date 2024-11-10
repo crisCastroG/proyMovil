@@ -86,12 +86,22 @@ export class RegistroPage implements OnInit {
       delete this.form.value.password;
 
       let path = `users/${uid}`;
+      
 
 
       this.firebaseSvc.setDocument(path, this.form.value).then(async res => {
-        
-        this.utilsSvc.saveInLocalStorage('user', this.form.value)
-        this.utilsSvc.routerLink('/home');
+        let userType = this.form.controls.type.value;
+
+        console.log(res);
+
+        this.utilsSvc.saveInLocalStorage('user', this.form.value);
+        this.utilsSvc.saveInLocalStorage('userType', userType);
+        if(userType === "profesor"){ // Redirige segun el tipo de cuenta
+            this.utilsSvc.routerLink('/home');
+        }else{
+          this.utilsSvc.routerLink('/home-alumno');
+        }
+
         this.form.reset();
 
       }).catch(error => {

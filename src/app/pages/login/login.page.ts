@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { MenuController } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { MenuController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
-  constructor(private menu: MenuController) { }
+  constructor(private menu: MenuController, private userService: UserService) { }
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -35,8 +36,7 @@ export class LoginPage implements OnInit {
       await loading.present();
 
       this.firebaseSvc.signIn(this.form.value as User).then(res => {
-        console.log(res);
-
+        
         this.getUserInfo(res.user.uid);
 
       }).catch(error => {
@@ -60,12 +60,22 @@ export class LoginPage implements OnInit {
       const loading = await this.utilsSvc.loading();
       await loading.present();
 
-      let path = 'users/${uid}';
+      let path = `users/${uid}`;
 
       this.firebaseSvc.getDocument(path).then((user: User) => {
 
+        let userType = user.type;
+
+        this.userService.setUserData(user);
+
         this.utilsSvc.saveInLocalStorage('user', user);
-        this.utilsSvc.routerLink('/home');
+        this.utilsSvc.saveInLocalStorage('userType', userType);
+        if(userType === "profesor"){
+          this.utilsSvc.routerLink('/home');
+        } else{
+          this.utilsSvc.routerLink('/home-alumno');
+        }
+        
         this.form.reset();
 
       }).catch(error => {

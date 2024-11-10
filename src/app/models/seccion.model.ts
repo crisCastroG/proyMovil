@@ -2,6 +2,6 @@ import { Asistencia } from "./asistencia.model";
 
 export interface Seccion {
     id: string;                      
-    nombSeccion: number;                  
+    nombSeccion: string;                  
     asistencia: Asistencia[];        
   }

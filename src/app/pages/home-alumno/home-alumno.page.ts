@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-home-alumno',
@@ -10,10 +12,22 @@ import { AlertController } from '@ionic/angular';
 export class HomeAlumnoPage implements OnInit  {
 
   isSupported = false;
-  
-  constructor(private alertController: AlertController) {}
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+
+  constructor(private menu: MenuController) { }
+
+  firebaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
+
+  ngOnInit(){
+    
+  }
+
+  ionViewWillEnter(){
+    this.menu.enable(true);
+  }
+
+  signOut(){
+    this.firebaseSvc.signOut();
   }
 
 
