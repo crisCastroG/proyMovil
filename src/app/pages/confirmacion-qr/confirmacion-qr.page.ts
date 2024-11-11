@@ -72,11 +72,6 @@ export class ConfirmacionQrPage implements OnInit {
       return;
     } 
 
-     // Muestra el mensaje con la ubicación actual
-     this.presentarMensajeUbicacion(location.latitude, location.longitude);
-
-      //
-
       let asistencia : Asistencia = {
         fecha : this.fecha,
         hora : this.hora,

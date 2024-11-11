@@ -65,6 +65,7 @@ export class EscanearQrAlumnoPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data) {  // Si existe data se procede a registrar la asistencia
       this.scanResult = data?.barcode?.displayValue;
+      if(this.scanResult.length !== 0 || this.scanResult)
       this.registrarAsistencia(this.scanResult);
     }
 
@@ -83,7 +84,6 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     // Checkear si la asistencia existe
     if (!document.exists()) {
-
       this.utilsSvc.presentToast({
         message: 'Error de lectura. Inténtelo denuevo.',
         duration: 2500,
@@ -94,8 +94,9 @@ export class EscanearQrAlumnoPage implements OnInit {
       return;
     }
 
+    let estaPresente = await this.verificarDocumentoExiste(path +'/asistentes',this.user().uid);
     // Checkear si ya está registrado en la asistencia
-    if (asistenciaData['asistentes'] && asistenciaData['asistentes'].includes(this.user().uid)) {
+    if (estaPresente) {
       this.utilsSvc.presentToast({
         message: 'Ya estás presente en esta clase',
         duration: 2500,
@@ -126,12 +127,11 @@ export class EscanearQrAlumnoPage implements OnInit {
     }
 
     // Aquí debería checkear si está lo suficientemente cerca al lugar de la asistencia.
-    const [qrLat, qrLng] = asistencia.localizacion
+    let [qrLat, qrLng] = asistencia.localizacion
       .split(',')
       .map(coord => parseFloat(coord.replace(/[^\d.-]/g, '')));
-
-    
-    let estaEnRango = this.checkLocation(qrLat, qrLng);
+  
+    let estaEnRango = await this.checkLocation(qrLat, qrLng);
     if (!estaEnRango) {
       this.utilsSvc.presentToast({
         message: 'No estas dentro de la ubicacion necesaria para marcar asistencia.',
@@ -299,6 +299,29 @@ export class EscanearQrAlumnoPage implements OnInit {
     // Crea un nuevo objeto Date con estos valores
     return new Date(anio, mes - 1, dia, horas, minutos, segundos);
   }
+
+  async verificarDocumentoExiste(coleccionPath: string, documentoId: string) {
+
+    let docRef = doc(getFirestore(), coleccionPath, documentoId);
+  
+    let docSnap = await getDoc(docRef);
+
+    this.utilsSvc.presentToast({
+      message: docSnap.id,
+      duration: 2500,
+      color: 'primary',
+      position: 'bottom'
+    });
+  
+    if (docSnap.exists()) {
+      
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
 }
 
 /*async requestPermissions(): Promise<boolean> {

@@ -25,11 +25,7 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
           utilsSvc.routerLink('/home-alumno');
           resolve(false);
           
-        }
-        
-
+        }        
       }
-
-
   });
 };

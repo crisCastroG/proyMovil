@@ -6,11 +6,11 @@
     </h1>
     <ion-card *ngFor="let asignatura of asignaturasAlumno"  color="tertiary" (click)="redirigirAlDetalle(asignatura)">
       <ion-card-header >
-        <ion-card-subtitle>{{asignatura.nombreAsignatura}}</ion-card-subtitle>
-        <ion-card-title>{{asignatura.siglaAsignatura}}</ion-card-title>
+        <ion-card-subtitle>{{asignatura.siglaAsignatura}}</ion-card-subtitle>
+        <ion-card-title>{{asignatura.nombreAsignatura}}</ion-card-title>
       </ion-card-header> 
       <ion-card-content>
-        Sección {{asignatura.nombreAsignatura}}<br>Profesor {{asignatura.nombreProfesor}}
+        Sección {{asignatura.nombreSeccion}}<br>Profesor {{asignatura.nombreProfesor}}
       </ion-card-content>
     </ion-card>
     
