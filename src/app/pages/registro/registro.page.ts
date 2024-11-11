@@ -95,7 +95,7 @@ export class RegistroPage implements OnInit {
         console.log(res);
 
         this.utilsSvc.saveInLocalStorage('user', this.form.value);
-        this.utilsSvc.saveInLocalStorage('userType', userType);
+        localStorage.setItem('userType', userType);
         if(userType === "profesor"){ // Redirige segun el tipo de cuenta
             this.utilsSvc.routerLink('/home');
         }else{

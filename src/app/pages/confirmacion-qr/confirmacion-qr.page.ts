@@ -45,7 +45,7 @@ export class ConfirmacionQrPage implements OnInit {
 
   ionViewWillEnter(){
     this.fecha = new Date().toLocaleDateString();
-    this.hora = new Date().toLocaleTimeString();
+    //this.hora = new Date().toLocaleTimeString();
     this.nombreAsignatura = this.detalleAsistencia().nombreAsignatura;
     this.siglaAsignatura = this.detalleAsistencia().siglaAsignatura;
     this.nombreSeccion = this.detalleAsistencia().nombreSeccion;
@@ -71,6 +71,8 @@ export class ConfirmacionQrPage implements OnInit {
       loading.dismiss();
       return;
     } 
+
+    this.hora = this.getFormattedTime(new Date());
 
       let asistencia : Asistencia = {
         fecha : this.fecha,
@@ -150,4 +152,10 @@ export class ConfirmacionQrPage implements OnInit {
       await alert.present();
     }
 
+    getFormattedTime(date) {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
+    }
 }

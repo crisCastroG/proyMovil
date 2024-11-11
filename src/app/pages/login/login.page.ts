@@ -69,7 +69,8 @@ export class LoginPage implements OnInit {
         this.userService.setUserData(user);
 
         this.utilsSvc.saveInLocalStorage('user', user);
-        this.utilsSvc.saveInLocalStorage('userType', userType);
+        localStorage.setItem('userType', userType);
+        
         if(userType === "profesor"){
           this.utilsSvc.routerLink('/home');
         } else{
