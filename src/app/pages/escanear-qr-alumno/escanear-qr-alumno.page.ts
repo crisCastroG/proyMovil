@@ -28,9 +28,7 @@ export class EscanearQrAlumnoPage implements OnInit {
   resultadoAsistencia = '';
   latitude: number | null = null;
   longitude: number | null = null;
-  locationMessage: string | null = null; // Variable para mostrar mensaje de ubicación
-  //Ubicacion DUOC: { lat: -36.79538244183323, lng: -73.06152573267023 }; 
-  readonly institutionCoords = { lat: -36.60909853022575, lng: -72.96350965358964 };
+  locationMessage: string | null = null; 
   readonly allowedDistance = 120; // Rango en metros
 
   firebaseSvc = inject(FirebaseService);
@@ -114,6 +112,8 @@ export class EscanearQrAlumnoPage implements OnInit {
     let fechaAhora = new Date();
     let diferencia = fechaAhora.getTime() - fechaAsistencia.getTime();
 
+   
+  
     if (diferencia > 300000) { // 5 minutos en milisegundos
       this.utilsSvc.presentToast({
         message: 'El tiempo para registrarte en esta clase ha expirado.',
@@ -126,15 +126,19 @@ export class EscanearQrAlumnoPage implements OnInit {
     }
 
     // Aquí debería checkear si está lo suficientemente cerca al lugar de la asistencia.
-    const position = await this.checkLocation(); // Obtener ubicación al presionar el botón
-    this.locationMessage = position ? `Ubicación actual: ${this.latitude?.toFixed(6)}, ${this.longitude?.toFixed(6)}` : 'No se pudo obtener la ubicación.';
+    const [qrLat, qrLng] = asistencia.localizacion
+      .split(',')
+      .map(coord => parseFloat(coord.replace(/[^\d.-]/g, '')));
 
-    // Verificar si el usuario está en el área permitida
-    if (!position) {
-      this.presentAlert(
-        'Ubicación no permitida',
-        'No estás dentro del área permitida para registrar asistencia. ' + this.locationMessage
-      );
+    
+    let estaEnRango = this.checkLocation(qrLat, qrLng);
+    if (!estaEnRango) {
+      this.utilsSvc.presentToast({
+        message: 'No estas dentro de la ubicacion necesaria para marcar asistencia.',
+        duration: 2500,
+        color: 'primary',
+        position: 'middle'
+      });
       loading.dismiss();
       return;
     }
@@ -204,7 +208,7 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     })
   }
-  async checkLocation(): Promise<boolean> {
+  async checkLocation(qrLat:number, qrLong:number): Promise<boolean> {
     try {
       const permission = await Geolocation.checkPermissions();
 
@@ -230,8 +234,8 @@ export class EscanearQrAlumnoPage implements OnInit {
       this.locationMessage = `Ubicación actual: ${this.latitude.toFixed(6)}, ${this.longitude.toFixed(6)}`;
 
       const distance = this.calculateDistance(
-        this.institutionCoords.lat,
-        this.institutionCoords.lng,
+        qrLat,
+        qrLong,
         this.latitude,
         this.longitude
       );

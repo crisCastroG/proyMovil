@@ -80,8 +80,10 @@ export class ConfirmacionQrPage implements OnInit {
       let asistencia : Asistencia = {
         fecha : this.fecha,
         hora : this.hora,
-        localizacion : 'Aquí deberian ir los datos de localización'
+        localizacion : `${location.latitude},${location.longitude}`
       }
+
+      console.log(`Lat: ${location.latitude}, Lng: ${location.longitude}`)
       
       // Este path sera parte del código QR 
       let detalleAsistencia = this.detalleAsistencia();
