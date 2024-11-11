@@ -147,7 +147,7 @@ export class EscanearQrAlumnoPage implements OnInit {
     let asistente: Asistente = {
       uid: this.user().uid,
       nombreCompleto: this.user().name,
-      hora: new Date().toLocaleTimeString(),
+      hora: this.getFormattedTime(new Date())
     }
 
     this.firebaseSvc.setDocument(`users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}/asistentes/${this.user().uid}`, asistente).then(async res => {
@@ -305,13 +305,6 @@ export class EscanearQrAlumnoPage implements OnInit {
     let docRef = doc(getFirestore(), coleccionPath, documentoId);
   
     let docSnap = await getDoc(docRef);
-
-    this.utilsSvc.presentToast({
-      message: docSnap.id,
-      duration: 2500,
-      color: 'primary',
-      position: 'bottom'
-    });
   
     if (docSnap.exists()) {
       
@@ -326,6 +319,17 @@ export class EscanearQrAlumnoPage implements OnInit {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
+  }
+
+  getFormattedDateTime(date) {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Los meses son de 0 a 11
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
 

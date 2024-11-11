@@ -52,6 +52,7 @@ export class AsignaturaDetallePage implements OnInit {
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         this.asistencias = res;
+        this.ordenarPorFechaYHora(this.asistencias);
         this.asistencias.forEach(asistencia => {
           this.getNumeroDeAsistentes(idAsignatura, idSeccion, asistencia);
         });
@@ -93,5 +94,21 @@ export class AsignaturaDetallePage implements OnInit {
     this.utilsSvc.routerLink('asistencia-detalle');
 
   }
+
+  ordenarPorFechaYHora(array) {
+    return array.sort((a, b) => {
+      // Convertir fecha y hora a objetos Date para cada elemento
+      let [diaA, mesA, añoA] = a.fecha.split('/').map(Number);
+      let [horasA, minutosA, segundosA] = a.hora.split(':').map(Number);
+      let fechaHoraA = new Date(añoA, mesA - 1, diaA, horasA, minutosA, segundosA);
+  
+      let [diaB, mesB, añoB] = b.fecha.split('/').map(Number);
+      let [horasB, minutosB, segundosB] = b.hora.split(':').map(Number);
+      let fechaHoraB = new Date(añoB, mesB - 1, diaB, horasB, minutosB, segundosB);
+  
+      return fechaHoraA.getTime() - fechaHoraB.getTime();
+    });
+  }
+
 
 }

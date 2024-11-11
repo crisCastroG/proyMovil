@@ -55,14 +55,25 @@ export class AsistenciaDetallePage implements OnInit {
     let path = `users/${this.user().uid}/asignaturas_profesor/${idAsignatura}/secciones/${idSeccion}/asistencias/${idAsistencia}/asistentes`
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
-      next: (res: any) => {
-        console.log(res);
+      next: (res: any) => {   
         this.asistentes = res;
+        this.ordenarPorHora(this.asistentes);
         sub.unsubscribe();
       }
     });
-    
+  }
 
+  ordenarPorHora(array: { hora: string }[]) {
+    return array.sort((a, b) => {
+      // Convertir hora a objeto Date para cada elemento
+      let [horasA, minutosA, segundosA] = a.hora.split(':').map(Number);
+      let horaA = new Date(0, 0, 0, horasA, minutosA, segundosA); 
+  
+      let [horasB, minutosB, segundosB] = b.hora.split(':').map(Number);
+      let horaB = new Date(0, 0, 0, horasB, minutosB, segundosB);
+  
+      return horaA.getTime() - horaB.getTime();
+    });
   }
 
 }
