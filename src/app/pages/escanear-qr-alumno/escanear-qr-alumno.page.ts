@@ -178,11 +178,11 @@ export class EscanearQrAlumnoPage implements OnInit {
 
       if(asignaturaAlumnoData['asignaturas_alumno'])
       {
-        if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaAlumno.idAsignatura)){
-          await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`,asignaturaAlumno);
+        if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaAlumno.idSeccion)){
+          await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idSeccion}`,asignaturaAlumno);
         }
       } else {
-        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`,asignaturaAlumno) 
+        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idSeccion}`,asignaturaAlumno) 
       }
 
       this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
