@@ -40,12 +40,20 @@ export class LoginPage implements OnInit {
         this.getUserInfo(res.user.uid);
 
       }).catch(error => {
-        this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle'
-        });
+
+        let usuarioDeStorage = this.utilsSvc.getFromLocalStorage(this.form.controls.email.value)
+        if(usuarioDeStorage){
+          this.getUserInfoOffline(this.form.controls.email.value)
+        } else {
+          this.utilsSvc.presentToast({
+            message: 'Error al iniciar sesión',
+            duration: 2500,
+            color: 'primary',
+            position: 'middle'
+          });
+        }
+
+
 
       }).finally(() => {
         loading.dismiss();
@@ -69,6 +77,7 @@ export class LoginPage implements OnInit {
         this.userService.setUserData(user);
 
         this.utilsSvc.saveInLocalStorage('user', user);
+        this.utilsSvc.saveInLocalStorage(this.form.controls.email.value, user);
         localStorage.setItem('userType', userType);
         
         if(userType === "profesor"){
@@ -92,6 +101,25 @@ export class LoginPage implements OnInit {
 
       })
     }
+  }
+
+  getUserInfoOffline(email : string){
+
+    let usuario = this.utilsSvc.getFromLocalStorage(email) as User;
+    let userType = usuario.type;
+
+    this.userService.setUserData(usuario);
+    this.utilsSvc.saveInLocalStorage('user', usuario);
+    localStorage.setItem('userType', userType);
+
+    if(userType === "profesor"){
+      this.utilsSvc.routerLink('/home');
+    } else{
+      this.utilsSvc.routerLink('/home-alumno');
+    }
+    
+    this.form.reset();
+
   }
 
 

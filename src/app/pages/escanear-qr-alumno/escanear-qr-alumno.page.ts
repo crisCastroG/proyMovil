@@ -177,7 +177,7 @@ export class EscanearQrAlumnoPage implements OnInit {
           message: 'Ya estas registrado en otra sección para esta asignatura',
           duration: 2000,
           color: 'primary',
-          position: 'bottom'
+          position: 'middle'
         })
         loading.dismiss();
         return;
@@ -202,7 +202,7 @@ export class EscanearQrAlumnoPage implements OnInit {
         message: 'Asistencia registrada con exito!',
         duration: 2000,
         color: 'primary',
-        position: 'bottom'
+        position: 'middle'
       })
 
     }).catch(error => {

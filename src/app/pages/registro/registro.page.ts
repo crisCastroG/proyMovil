@@ -92,9 +92,10 @@ export class RegistroPage implements OnInit {
       this.firebaseSvc.setDocument(path, this.form.value).then(async res => {
         let userType = this.form.controls.type.value;
 
-        console.log(res);
 
         this.utilsSvc.saveInLocalStorage('user', this.form.value);
+        this.utilsSvc.saveInLocalStorage(this.form.controls.email.value, this.form.value)
+        
         localStorage.setItem('userType', userType);
         if(userType === "profesor"){ // Redirige segun el tipo de cuenta
             this.utilsSvc.routerLink('/home');
