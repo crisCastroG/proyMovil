@@ -28,7 +28,7 @@ export class EscanearQrAlumnoPage implements OnInit {
   resultadoAsistencia = '';
   latitude: number | null = null;
   longitude: number | null = null;
-  locationMessage: string | null = null; 
+  locationMessage: string | null = null;
   readonly allowedDistance = 120; // Rango en metros
 
   firebaseSvc = inject(FirebaseService);
@@ -65,8 +65,8 @@ export class EscanearQrAlumnoPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data) {  // Si existe data se procede a registrar la asistencia
       this.scanResult = data?.barcode?.displayValue;
-      if(this.scanResult.length !== 0 || this.scanResult)
-      this.registrarAsistencia(this.scanResult);
+      if (this.scanResult.length !== 0 || this.scanResult)
+        this.registrarAsistencia(this.scanResult);
     }
 
   }
@@ -76,7 +76,7 @@ export class EscanearQrAlumnoPage implements OnInit {
     const loading = await this.utilsSvc.loading();
     await loading.present();
 
-    let qrData : QrCode = JSON.parse(qrResult);
+    let qrData: QrCode = JSON.parse(qrResult);
 
     let path = `users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}`
     let document = await getDoc(doc(getFirestore(), path));
@@ -94,7 +94,7 @@ export class EscanearQrAlumnoPage implements OnInit {
       return;
     }
 
-    let estaPresente = await this.verificarDocumentoExiste(path +'/asistentes',this.user().uid);
+    let estaPresente = await this.verificarDocumentoExiste(path + '/asistentes', this.user().uid);
     // Checkear si ya está registrado en la asistencia
     if (estaPresente) {
       this.utilsSvc.presentToast({
@@ -113,8 +113,8 @@ export class EscanearQrAlumnoPage implements OnInit {
     let fechaAhora = new Date();
     let diferencia = fechaAhora.getTime() - fechaAsistencia.getTime();
 
-   
-  
+
+
     if (diferencia > 1800000) { // 30 minutos en milisegundos
       this.utilsSvc.presentToast({
         message: 'El tiempo para registrarte en esta clase ha expirado.',
@@ -143,6 +143,49 @@ export class EscanearQrAlumnoPage implements OnInit {
       return;
     }
 
+    let detalleAsistencia: DetalleAsistencia = {
+      idAsignatura: qrData.id_asignatura,
+      idSeccion: qrData.id_seccion,
+      nombreAsignatura: qrData.nombreAsignatura,
+      siglaAsignatura: qrData.siglaAsignatura,
+      nombreSeccion: qrData.nombreSeccion,
+      fecha: qrData.fecha,
+      hora: qrData.hora,
+    }
+
+    // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
+    let asignaturaDocument = await getDoc(doc(getFirestore(), `users/${this.user().uid}/asignaturas_alumno/${qrData.id_asignatura}`));
+    
+    let asignaturaAlumno: AsignaturaAlumno = {
+      idAsignatura: qrData.id_asignatura,
+      idSeccion: qrData.id_seccion,
+      idProfesor: qrData.id_profesor,
+      nombreAsignatura: qrData.nombreAsignatura,
+      siglaAsignatura: qrData.siglaAsignatura,
+      nombreSeccion: qrData.nombreSeccion,
+      nombreProfesor: qrData.nombreProfesor
+    }
+    if (!asignaturaDocument.exists()) // Si no existe la asignatura, agregarla
+    {
+      await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`, asignaturaAlumno);
+    }
+    else {
+      let asignaturaDetalleData = asignaturaDocument.data()
+      if(asignaturaDetalleData["idSeccion"] !== qrData.id_seccion)
+      {
+        this.utilsSvc.presentToast({
+          message: 'Ya estas registrado en otra sección para esta asignatura',
+          duration: 2000,
+          color: 'primary',
+          position: 'bottom'
+        })
+        loading.dismiss();
+        return;
+      }
+    }
+
+    this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
+
     // Registrar al alumno en la lista de asistentes
     let asistente: Asistente = {
       uid: this.user().uid,
@@ -151,41 +194,8 @@ export class EscanearQrAlumnoPage implements OnInit {
     }
 
     this.firebaseSvc.setDocument(`users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}/asistentes/${this.user().uid}`, asistente).then(async res => {
-      
-      let detalleAsistencia : DetalleAsistencia = {
-        idAsignatura : qrData.id_asignatura,
-        idSeccion : qrData.id_seccion,
-        nombreAsignatura : qrData.nombreAsignatura,
-        siglaAsignatura : qrData.siglaAsignatura,
-        nombreSeccion : qrData.nombreSeccion,
-        fecha : qrData.fecha,
-        hora : qrData.hora,
-      }
 
-      // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
-      let document = await getDoc(doc(getFirestore(), `users/${this.user().uid}`));
-      let asignaturaAlumnoData = document.data();
 
-      let asignaturaAlumno : AsignaturaAlumno = {
-        idAsignatura : qrData.id_asignatura,
-        idSeccion : qrData.id_seccion,
-        idProfesor : qrData.id_profesor,
-        nombreAsignatura : qrData.nombreAsignatura,
-        siglaAsignatura : qrData.siglaAsignatura,
-        nombreSeccion : qrData.nombreSeccion,
-        nombreProfesor : qrData.nombreProfesor
-      }
-
-      if(asignaturaAlumnoData['asignaturas_alumno'])
-      {
-        if(!asignaturaAlumnoData['asignaturas_alumno'].includes(asignaturaAlumno.idSeccion)){
-          await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idSeccion}`,asignaturaAlumno);
-        }
-      } else {
-        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idSeccion}`,asignaturaAlumno) 
-      }
-
-      this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
       this.utilsSvc.routerLink('escaneo-exitoso');
 
       this.utilsSvc.presentToast({
@@ -208,7 +218,7 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     })
   }
-  async checkLocation(qrLat:number, qrLong:number): Promise<boolean> {
+  async checkLocation(qrLat: number, qrLong: number): Promise<boolean> {
     try {
       const permission = await Geolocation.checkPermissions();
 
@@ -303,11 +313,11 @@ export class EscanearQrAlumnoPage implements OnInit {
   async verificarDocumentoExiste(coleccionPath: string, documentoId: string) {
 
     let docRef = doc(getFirestore(), coleccionPath, documentoId);
-  
+
     let docSnap = await getDoc(docRef);
-  
+
     if (docSnap.exists()) {
-      
+
       return true;
     } else {
       return false;
@@ -328,7 +338,7 @@ export class EscanearQrAlumnoPage implements OnInit {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
-  
+
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
