@@ -10,6 +10,7 @@ export class UtilsService {
   loadingCtrl = inject(LoadingController);
   toastCtrl = inject(ToastController);
   router = inject(Router);
+  
 
   // Icono de cargando
   loading() {
@@ -27,12 +28,14 @@ export class UtilsService {
   }
 
   // Para guardar en el local storage
-  saveInLocalStorage(key : string, value: any){
+  saveInLocalStorage(key: string, value: any) {
     return localStorage.setItem(key, JSON.stringify(value));
   }
-  
+
   // Para obtener del local storage
-  getFromLocalStorage(key: string){
+  getFromLocalStorage(key: string) {
     return JSON.parse(localStorage.getItem(key))
   }
+
+  
 }

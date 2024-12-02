@@ -4,6 +4,14 @@
     <h1 class="ion-text-center ion-margin">
       Lista de mis asignaturas
     </h1>
+    <div *ngIf="asisPendientes" style="text-align: center;">
+      <p class="ion-text-center ion-margin">
+        Tienes asistencias pendientes por subir, conéctate a internet y actualiza.
+      </p>
+      <ion-button   (click)="actualizarLista()" color="primary" expand="block" fill="solid" shape="round">
+        Actualizar lista
+      </ion-button>
+    </div>
     <ion-card *ngFor="let asignatura of asignaturasAlumno"  color="tertiary" (click)="redirigirAlDetalle(asignatura)">
       <ion-card-header >
         <ion-card-subtitle>{{asignatura.siglaAsignatura}}</ion-card-subtitle>

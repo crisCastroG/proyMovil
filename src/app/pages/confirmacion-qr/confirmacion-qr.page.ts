@@ -80,7 +80,6 @@ export class ConfirmacionQrPage implements OnInit {
         localizacion : `${location.latitude},${location.longitude}`
       }
 
-      console.log(`Lat: ${location.latitude}, Lng: ${location.longitude}`)
       
       // Este path sera parte del código QR 
       let detalleAsistencia = this.detalleAsistencia();
@@ -100,6 +99,7 @@ export class ConfirmacionQrPage implements OnInit {
           idAsistencia: res.id,
           fecha: asistencia.fecha,
           hora: asistencia.hora,
+          localizacion: `${location.latitude},${location.longitude}`
         }
         
         localStorage.setItem('qrGenerado', JSON.stringify(qrCode)); // El código QR se guarda en el localStorage para cargarlo en la siguiente pagina

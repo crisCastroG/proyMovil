@@ -1,3 +1,4 @@
+import { AsistenciasPendientes } from './../../models/asistenciasPendientes';
 import { Asistente } from '../../models/asistente.model';
 import { Component, inject, OnInit } from '@angular/core';
 import { Barcode, BarcodeScanner, LensFacing } from '@capacitor-mlkit/barcode-scanning';
@@ -6,7 +7,6 @@ import { getDoc } from '@angular/fire/firestore';
 import { BarcodeScanningModalComponent } from './barcode-scanning-modal.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { Asistencia } from 'src/app/models/asistencia.model';
 import { doc, getFirestore } from 'firebase/firestore';
 import { User } from 'src/app/models/user.model';
 import { DetalleAsistencia } from 'src/app/models/detalle_asistencia.model';
@@ -78,38 +78,87 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     let qrData: QrCode = JSON.parse(qrResult);
 
+    let detalleAsistencia: DetalleAsistencia = {
+      idAsistencia : qrData.idAsistencia,
+      idAsignatura: qrData.id_asignatura,
+      idSeccion: qrData.id_seccion,
+      idProfesor: qrData.id_profesor,
+      nombreprofesor: qrData.nombreProfesor,
+      nombreAsignatura: qrData.nombreAsignatura,
+      siglaAsignatura: qrData.siglaAsignatura,
+      nombreSeccion: qrData.nombreSeccion,
+      fecha: qrData.fecha,
+      hora: qrData.hora,
+    }
+
     let path = `users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}`
-    let document = await getDoc(doc(getFirestore(), path));
-    let asistenciaData = document.data();
+    let document;
+    let asistenciasPendientes : AsistenciasPendientes = this.utilsSvc.getFromLocalStorage("asistenciasPendientes_" + this.user().uid) as AsistenciasPendientes;
+    let registroOffline: Boolean = false;
 
-    // Checkear si la asistencia existe
-    if (!document.exists()) {
-      this.utilsSvc.presentToast({
-        message: 'Error de lectura. Inténtelo denuevo.',
-        duration: 2500,
-        color: 'primary',
-        position: 'middle'
-      });
-      loading.dismiss();
-      return;
+    try {
+      document = await getDoc(doc(getFirestore(), path));
+    } catch (error) {
+
+      registroOffline = true;
+
     }
 
-    let estaPresente = await this.verificarDocumentoExiste(path + '/asistentes', this.user().uid);
-    // Checkear si ya está registrado en la asistencia
-    if (estaPresente) {
-      this.utilsSvc.presentToast({
-        message: 'Ya estás presente en esta clase',
-        duration: 2500,
-        color: 'primary',
-        position: 'middle'
-      });
-      loading.dismiss();
-      return;
+    if (registroOffline === true) {
+      let estaPresente: Boolean = false;
+      if (asistenciasPendientes) {
+        asistenciasPendientes.asistencias.forEach(asistencia => {
+          if (asistencia.idAsistencia === qrData.idAsistencia) {
+            estaPresente = true;
+            return;
+          }
+        });
+      }
+      if (estaPresente === true) {
+        this.utilsSvc.presentToast({
+          message: 'Esta asistencia ya está guardada en asistencias pendientes.',
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+        loading.dismiss();
+        return;
+      }
+
+
+    } else {
+
+      // Checkear si la asistencia existe
+      if (!document.exists()) {
+        this.utilsSvc.presentToast({
+          message: 'Error de lectura. Inténtelo denuevo.',
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+        loading.dismiss();
+        return;
+      }
+
+
+      let estaPresente = await this.verificarDocumentoExiste(path + '/asistentes', this.user().uid);
+      // Checkear si ya está registrado en la asistencia
+      if (estaPresente) {
+        this.utilsSvc.presentToast({
+          message: 'Ya estás presente en esta clase',
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+        loading.dismiss();
+        return;
+      }
     }
+
+
 
     // Checkear si está dentro del tiempo para registrar asistencia
-    let asistencia = asistenciaData as Asistencia;
-    let fechaAsistencia = this.convertirStringADate(asistencia.fecha + ' ' + asistencia.hora);
+    let fechaAsistencia = this.convertirStringADate(qrData.fecha + ' ' + qrData.hora);
     let fechaAhora = new Date();
     let diferencia = fechaAhora.getTime() - fechaAsistencia.getTime();
 
@@ -127,10 +176,10 @@ export class EscanearQrAlumnoPage implements OnInit {
     }
 
     // Aquí debería checkear si está lo suficientemente cerca al lugar de la asistencia.
-    let [qrLat, qrLng] = asistencia.localizacion
+    let [qrLat, qrLng] = qrData.localizacion
       .split(',')
       .map(coord => parseFloat(coord.replace(/[^\d.-]/g, '')));
-  
+
     let estaEnRango = await this.checkLocation(qrLat, qrLng);
     if (!estaEnRango) {
       this.utilsSvc.presentToast({
@@ -143,80 +192,102 @@ export class EscanearQrAlumnoPage implements OnInit {
       return;
     }
 
-    let detalleAsistencia: DetalleAsistencia = {
-      idAsignatura: qrData.id_asignatura,
-      idSeccion: qrData.id_seccion,
-      nombreAsignatura: qrData.nombreAsignatura,
-      siglaAsignatura: qrData.siglaAsignatura,
-      nombreSeccion: qrData.nombreSeccion,
-      fecha: qrData.fecha,
-      hora: qrData.hora,
-    }
+    if (registroOffline === false) {
+      // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
+      let asignaturaDocument = await getDoc(doc(getFirestore(), `users/${this.user().uid}/asignaturas_alumno/${qrData.id_asignatura}`));
 
-    // Asignando esta asignatura a la lista de asignaturas del alumno, si es que no la tiene asignada.
-    let asignaturaDocument = await getDoc(doc(getFirestore(), `users/${this.user().uid}/asignaturas_alumno/${qrData.id_asignatura}`));
-    
-    let asignaturaAlumno: AsignaturaAlumno = {
-      idAsignatura: qrData.id_asignatura,
-      idSeccion: qrData.id_seccion,
-      idProfesor: qrData.id_profesor,
-      nombreAsignatura: qrData.nombreAsignatura,
-      siglaAsignatura: qrData.siglaAsignatura,
-      nombreSeccion: qrData.nombreSeccion,
-      nombreProfesor: qrData.nombreProfesor
-    }
-    if (!asignaturaDocument.exists()) // Si no existe la asignatura, agregarla
-    {
-      await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`, asignaturaAlumno);
-    }
-    else {
-      let asignaturaDetalleData = asignaturaDocument.data()
-      if(asignaturaDetalleData["idSeccion"] !== qrData.id_seccion)
+      let asignaturaAlumno: AsignaturaAlumno = {
+        idAsignatura: qrData.id_asignatura,
+        idSeccion: qrData.id_seccion,
+        idProfesor: qrData.id_profesor,
+        nombreAsignatura: qrData.nombreAsignatura,
+        siglaAsignatura: qrData.siglaAsignatura,
+        nombreSeccion: qrData.nombreSeccion,
+        nombreProfesor: qrData.nombreProfesor
+      }
+      if (!asignaturaDocument.exists()) // Si no existe la asignatura, agregarla
       {
+        await this.firebaseSvc.setDocument(`users/${this.user().uid}/asignaturas_alumno/${asignaturaAlumno.idAsignatura}`, asignaturaAlumno);
+      }
+      else {
+        let asignaturaDetalleData = asignaturaDocument.data()
+        if (asignaturaDetalleData["idSeccion"] !== qrData.id_seccion) {
+          this.utilsSvc.presentToast({
+            message: 'Ya estas registrado en otra sección para esta asignatura',
+            duration: 2000,
+            color: 'primary',
+            position: 'middle'
+          })
+          loading.dismiss();
+          return;
+        }
+      }
+
+      this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
+
+      // Registrar al alumno en la lista de asistentes
+      let asistente: Asistente = {
+        uid: this.user().uid,
+        nombreCompleto: this.user().name,
+        hora: this.getFormattedTime(new Date())
+      }
+
+      this.firebaseSvc.setDocument(`users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}/asistentes/${this.user().uid}`, asistente).then(async res => {
+
+        this.utilsSvc.routerLink('escaneo-exitoso');
+
         this.utilsSvc.presentToast({
-          message: 'Ya estas registrado en otra sección para esta asignatura',
+          message: 'Asistencia registrada con exito!',
           duration: 2000,
           color: 'primary',
           position: 'middle'
         })
+
+      }).catch(error => {
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle'
+        });
+
+      }).finally(() => {
         loading.dismiss();
-        return;
+
+      })
+    } else { // Registrar asistencia offline
+
+      if (asistenciasPendientes) { // Si ya existen asistencias pendientes, pushear otra a la cola
+
+        asistenciasPendientes.asistencias.push(detalleAsistencia);
+        this.utilsSvc.saveInLocalStorage("asistenciasPendientes_" + this.user().uid, asistenciasPendientes)
+
+      } else {
+
+        let asistenciasPendientes: AsistenciasPendientes = {
+          asistencias: [
+
+          ]
+        }
+        asistenciasPendientes.asistencias.push(detalleAsistencia);
+
+        this.utilsSvc.saveInLocalStorage("asistenciasPendientes_" + this.user().uid, asistenciasPendientes);
+
       }
-    }
-
-    this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
-
-    // Registrar al alumno en la lista de asistentes
-    let asistente: Asistente = {
-      uid: this.user().uid,
-      nombreCompleto: this.user().name,
-      hora: this.getFormattedTime(new Date())
-    }
-
-    this.firebaseSvc.setDocument(`users/${qrData.id_profesor}/asignaturas_profesor/${qrData.id_asignatura}/secciones/${qrData.id_seccion}/asistencias/${qrData.idAsistencia}/asistentes/${this.user().uid}`, asistente).then(async res => {
-
-
-      this.utilsSvc.routerLink('escaneo-exitoso');
+      this.utilsSvc.saveInLocalStorage('asistenciaEscaneada', detalleAsistencia);
+      loading.dismiss();
 
       this.utilsSvc.presentToast({
-        message: 'Asistencia registrada con exito!',
+        message: 'Sin conexión, registrada en asistencias pendientes',
         duration: 2000,
         color: 'primary',
         position: 'middle'
       })
 
-    }).catch(error => {
-      this.utilsSvc.presentToast({
-        message: error.message,
-        duration: 2500,
-        color: 'primary',
-        position: 'middle'
-      });
+      this.utilsSvc.routerLink('escaneo-exitoso');
+    }
 
-    }).finally(() => {
-      loading.dismiss();
 
-    })
   }
   async checkLocation(qrLat: number, qrLong: number): Promise<boolean> {
     try {
@@ -341,6 +412,7 @@ export class EscanearQrAlumnoPage implements OnInit {
 
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
+
 
 
 }

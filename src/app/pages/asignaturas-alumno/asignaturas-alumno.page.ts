@@ -11,22 +11,25 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class AsignaturasAlumnoPage implements OnInit {
 
+  asisPendientes: boolean = false;
+
   constructor() { }
 
   utilsSvc = inject(UtilsService);
   firebaseSvc = inject(FirebaseService);
-  
-  asignaturasAlumno : AsignaturaAlumno[];
-  
+
+  asignaturasAlumno: AsignaturaAlumno[];
+
   user(): User {
     return this.utilsSvc.getFromLocalStorage('user');
   }
 
   ngOnInit() {
   }
-  
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     this.getAsignaturasAlumno();
+    this.verificarAsistenciasPendientes();
   }
 
   getAsignaturasAlumno() {
@@ -40,9 +43,31 @@ export class AsignaturasAlumnoPage implements OnInit {
     })
   }
 
-  redirigirAlDetalle(asignatura: AsignaturaAlumno){
+  redirigirAlDetalle(asignatura: AsignaturaAlumno) {
     this.utilsSvc.saveInLocalStorage('seleccionAsignatura', asignatura);
     this.utilsSvc.routerLink('asignaturas-alumno-detalle');
+  }
+
+  verificarAsistenciasPendientes() {
+    if (this.utilsSvc.getFromLocalStorage("asistenciasPendientes_" + this.user().uid)) {
+      this.asisPendientes = true;
+    }
+  }
+
+  async actualizarLista() {
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+    await this.firebaseSvc.cargarAsistenciasPendientes(this.user().uid, this.user().name).then(res => {
+      this.asisPendientes = false;
+    }
+    ).catch((error) => {
+      this.asisPendientes = true;
+    }).finally(()=>{        
+      loading.dismiss();
+      
+    })
+    this.getAsignaturasAlumno(); 
+
   }
 
 }

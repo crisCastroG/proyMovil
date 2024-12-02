@@ -9,4 +9,5 @@ export interface QrCode {
     idAsistencia: string;
     fecha: string;
     hora: string;
+    localizacion?: string;
   }
