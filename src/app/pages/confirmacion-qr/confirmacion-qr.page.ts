@@ -59,7 +59,7 @@ export class ConfirmacionQrPage implements OnInit {
       await loading.present();
 
       // Aquí se debería calcular los datos de localización para guardarlos
-      const location = await this.saveLocation();
+    const location = await this.saveLocation();
 
     if (!location) {
       this.utilsSvc.presentToast({

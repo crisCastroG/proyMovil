@@ -16,6 +16,9 @@ export class EncabezadoComponent  implements OnInit {
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
 
+  private _ocultar : boolean = false;
+  
+  @Input() ocultar: boolean | undefined;
   @Input() titulo:string=''
 
   ngOnInit() {

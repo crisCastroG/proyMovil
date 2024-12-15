@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { getDoc } from 'firebase/firestore';
 import { AsignaturaAlumno } from 'src/app/models/asignatura_alumno.model';
 import { AsistenciaAlumno } from 'src/app/models/asistencia.alumno.model';
@@ -15,7 +15,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class AsignaturasAlumnoDetallePage implements OnInit {
 
-  constructor() { }
+  constructor(private cdr: ChangeDetectorRef) { }
 
   utilsSvc = inject(UtilsService);
   firebaseSvc = inject(FirebaseService);
@@ -24,6 +24,9 @@ export class AsignaturasAlumnoDetallePage implements OnInit {
   siglaAsignatura: string = '';
   nombreSeccion: string = '';
   nombreProfesor: string = '';
+  numeroPresentes: number = 0;
+  asistenciasTotal: number = 0;
+  porcentajeAsitencia : number = 0;
 
 
   asistenciasAlumno : AsistenciaAlumno[] = [];
@@ -61,10 +64,16 @@ export class AsignaturasAlumnoDetallePage implements OnInit {
         this.ordenarPorFechaYHora(this.asistencias);
         this.asistencias.forEach( asistencia => {
           this.getAsistentes(a, asistencia);
+          this.asistenciasTotal = this.asistenciasTotal + 1;
         });
+
+        this.cdr.detectChanges();
+
         sub.unsubscribe();
       }
+      
     })
+
   }
 
   getAsistentes(asig : AsignaturaAlumno, asis : Asistencia){
@@ -83,6 +92,7 @@ export class AsignaturasAlumnoDetallePage implements OnInit {
           if(asistente.uid === this.user().uid){
             estado = 'presente';
             hora = asistente.hora;
+            this.numeroPresentes = this.numeroPresentes + 1;
             return false;
           }
           return true;          
@@ -94,6 +104,12 @@ export class AsignaturasAlumnoDetallePage implements OnInit {
           estadoPresente : estado
         }
         this.asistenciasAlumno.push(asistenciaAlumno);
+        if(this.asistenciasTotal != 0){
+          this.porcentajeAsitencia = Math.trunc(100 * this.numeroPresentes / this.asistenciasTotal);
+        }
+        else{
+          this.porcentajeAsitencia = 0;
+        }
         sub.unsubscribe();
       }
     })
